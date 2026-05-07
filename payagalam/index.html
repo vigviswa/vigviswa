@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>பயகலாம்</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Caveat:wght@400;500&display=swap');
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: #e8e0d4;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      clip-path: circle(0% at 50% 50%);
+      animation: iris-open 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+    }
+
+    @keyframes iris-open {
+      to { clip-path: circle(150% at 50% 50%); }
+    }
+
+    .skyline {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bluebonnet {
+      position: fixed;
+      bottom: 60px;
+      right: 7%;
+      width: 70px;
+      height: 200px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .bluebonnet .stem {
+      stroke-dasharray: 240;
+      stroke-dashoffset: 240;
+      animation: draw-stem 2.4s ease-out 1.8s forwards;
+    }
+
+    .bluebonnet .leaf {
+      opacity: 0;
+      transform-origin: 40px 200px;
+      animation: bloom-leaf 0.8s ease-out forwards;
+    }
+
+    .bluebonnet .leaf-1 { animation-delay: 3.2s; }
+    .bluebonnet .leaf-2 { animation-delay: 3.6s; }
+
+    .bluebonnet .bud {
+      opacity: 0;
+      animation: bloom-bud 0.6s ease-out forwards;
+    }
+
+    .bluebonnet .bud-1 { animation-delay: 3.9s; }
+    .bluebonnet .bud-2 { animation-delay: 4.05s; }
+    .bluebonnet .bud-3 { animation-delay: 4.2s; }
+    .bluebonnet .bud-4 { animation-delay: 4.35s; }
+    .bluebonnet .bud-5 { animation-delay: 4.5s; }
+    .bluebonnet .bud-6 { animation-delay: 4.65s; }
+    .bluebonnet .bud-7 { animation-delay: 4.8s; }
+    .bluebonnet .bud-8 { animation-delay: 4.95s; }
+    .bluebonnet .bud-9 { animation-delay: 5.1s; }
+
+    @keyframes draw-stem {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes bloom-leaf {
+      from { opacity: 0; transform: scale(0.4); }
+      to { opacity: 0.55; transform: scale(1); }
+    }
+
+    @keyframes bloom-bud {
+      from { opacity: 0; transform: scale(0.2); }
+      to { opacity: 0.7; transform: scale(1); }
+    }
+
+    .container {
+      max-width: 720px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    .greeting {
+      font-size: 0.85rem;
+      letter-spacing: 0.32em;
+      text-transform: lowercase;
+      color: rgba(232, 224, 212, 0.55);
+      margin-bottom: 2.4rem;
+      opacity: 0;
+      transition: opacity 1.2s ease 1.6s;
+    }
+
+    .greeting.visible { opacity: 1; }
+
+    .line {
+      font-size: 1.5rem;
+      font-weight: 300;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.5rem;
+      min-height: 2.7rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .line.visible { opacity: 1; }
+
+    .line.final {
+      font-size: 2.2rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-top: 1.4rem;
+      color: #f5ebe0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: #e8e0d4;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.9s ease-in-out infinite;
+    }
+
+    .final .cursor {
+      height: 1.3em;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .polaroid-row {
+      margin: 2.6rem auto 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.2rem;
+      perspective: 1000px;
+    }
+
+    .polaroid-wrap {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .polaroid-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .polaroid {
+      width: 200px;
+      height: 246px;
+      background: #f5ebe0;
+      padding: 12px 12px 0 12px;
+      margin: 0 auto;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.4);
+      position: relative;
+      transition: transform 0.6s ease;
+    }
+
+    .polaroid-left  { transform: rotate(-3.5deg); }
+    .polaroid-right { transform: rotate(2.6deg);  }
+
+    .polaroid-left:hover  { transform: rotate(-1.5deg) translateY(-4px); }
+    .polaroid-right:hover { transform: rotate(1deg)   translateY(-4px); }
+
+    .polaroid-photo {
+      width: 100%;
+      height: 176px;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(40, 40, 40, 0.6) 0%, rgba(10, 10, 10, 1) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .polaroid-photo.drawing {
+      background-image: url('her-drawing.png');
+      background-size: cover;
+      background-position: center 52%;
+      background-color: #0a0a0a;
+    }
+
+    .polaroid-photo:not(.drawing)::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          transparent 0,
+          transparent 6px,
+          rgba(255, 255, 255, 0.012) 6px,
+          rgba(255, 255, 255, 0.012) 7px
+        );
+    }
+
+    .polaroid-caption {
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.2rem;
+      color: #444;
+      padding: 12px 0 14px;
+      letter-spacing: 0.01em;
+    }
+
+    .signoff {
+      margin-top: 1.6rem;
+      font-size: 1.05rem;
+      font-style: italic;
+      letter-spacing: 0.03em;
+      color: rgba(232, 224, 212, 0.62);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .signoff.visible { opacity: 1; }
+
+    .filmstrip {
+      position: fixed;
+      bottom: 22px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      z-index: 1;
+    }
+
+    .filmstrip.visible { opacity: 0.5; }
+
+    .frame {
+      width: 64px;
+      height: 44px;
+      background: #0d0d0d;
+      border-top: 8px solid #050505;
+      border-bottom: 8px solid #050505;
+      position: relative;
+      box-sizing: content-box;
+    }
+
+    .frame::before,
+    .frame::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      display: flex;
+    }
+
+    .frame::before {
+      top: -6px;
+      background:
+        linear-gradient(to right,
+          #1a1a1a 0, #1a1a1a 4px, transparent 4px, transparent 9px,
+          #1a1a1a 9px, #1a1a1a 13px, transparent 13px, transparent 18px,
+          #1a1a1a 18px, #1a1a1a 22px, transparent 22px, transparent 27px,
+          #1a1a1a 27px, #1a1a1a 31px, transparent 31px, transparent 36px,
+          #1a1a1a 36px, #1a1a1a 40px, transparent 40px, transparent 45px,
+          #1a1a1a 45px, #1a1a1a 50px);
+    }
+
+    .frame::after {
+      bottom: -6px;
+      background:
+        linear-gradient(to right,
+          #1a1a1a 0, #1a1a1a 4px, transparent 4px, transparent 9px,
+          #1a1a1a 9px, #1a1a1a 13px, transparent 13px, transparent 18px,
+          #1a1a1a 18px, #1a1a1a 22px, transparent 22px, transparent 27px,
+          #1a1a1a 27px, #1a1a1a 31px, transparent 31px, transparent 36px,
+          #1a1a1a 36px, #1a1a1a 40px, transparent 40px, transparent 45px,
+          #1a1a1a 45px, #1a1a1a 50px);
+    }
+
+    .filmstrip-caption {
+      position: fixed;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: lowercase;
+      color: rgba(232, 224, 212, 0.32);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      z-index: 2;
+    }
+
+    .filmstrip-caption.visible { opacity: 1; }
+
+    @media (max-width: 600px) {
+      .container { padding: 1.5rem; }
+      .greeting { font-size: 0.75rem; margin-bottom: 1.8rem; }
+      .line { font-size: 1.2rem; }
+      .line.final { font-size: 1.7rem; }
+      .polaroid-row { flex-direction: column; gap: 0.6rem; margin: 2rem auto 1rem; }
+      .polaroid { width: 170px; height: 210px; padding: 10px 10px 0 10px; }
+      .polaroid-photo { height: 150px; }
+      .polaroid-caption { font-size: 1.05rem; padding: 8px 0 10px; }
+      .polaroid-left  { transform: rotate(-2.4deg); }
+      .polaroid-right { transform: rotate(1.8deg);  }
+      .signoff { font-size: 0.95rem; }
+      .bluebonnet { width: 50px; height: 150px; right: 4%; bottom: 80px; }
+      .skyline { height: 60px; bottom: 80px; }
+      .frame { width: 44px; height: 30px; }
+      .frame::before, .frame::after { width: 36px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body { animation: none; clip-path: none; }
+      .bluebonnet * { animation: none !important; opacity: 0.55 !important; stroke-dashoffset: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <svg class="skyline" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="60"   y="58"  width="48" height="62" fill="#e8e0d4"/>
+    <rect x="130"  y="48"  width="36" height="72" fill="#e8e0d4"/>
+    <rect x="190"  y="40"  width="22" height="80" fill="#e8e0d4"/>
+    <rect x="186"  y="32"  width="30" height="8"  fill="#e8e0d4"/>
+    <rect x="198"  y="20"  width="6"  height="14" fill="#e8e0d4"/>
+    <rect x="270"  y="62"  width="60" height="58" fill="#e8e0d4"/>
+    <rect x="350"  y="52"  width="44" height="68" fill="#e8e0d4"/>
+    <path d="M470,72 Q510,28 550,72 L545,120 L475,120 Z" fill="#e8e0d4"/>
+    <rect x="505"  y="14"  width="10" height="20" fill="#e8e0d4"/>
+    <circle cx="510" cy="12" r="3" fill="#e8e0d4"/>
+    <rect x="610"  y="60"  width="50" height="60" fill="#e8e0d4"/>
+    <rect x="680"  y="50"  width="40" height="70" fill="#e8e0d4"/>
+    <path d="M770,40 L820,40 L824,120 L766,120 Z" fill="#e8e0d4"/>
+    <polygon points="770,40 782,18 794,40" fill="#e8e0d4"/>
+    <polygon points="794,40 806,12 818,40" fill="#e8e0d4"/>
+    <polygon points="818,40 824,28 826,40" fill="#e8e0d4"/>
+    <rect x="850"  y="58"  width="46" height="62" fill="#e8e0d4"/>
+    <rect x="910"  y="46"  width="34" height="74" fill="#e8e0d4"/>
+    <rect x="960"  y="64"  width="54" height="56" fill="#e8e0d4"/>
+    <rect x="1030" y="52"  width="40" height="68" fill="#e8e0d4"/>
+    <rect x="1090" y="60"  width="60" height="60" fill="#e8e0d4"/>
+  </svg>
+
+  <svg class="bluebonnet" viewBox="0 0 80 220" aria-hidden="true">
+    <path class="stem" d="M40,220 C42,180 38,150 40,120 C42,95 38,70 40,40"
+          stroke="#9aa68f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+
+    <ellipse class="leaf leaf-1" cx="28" cy="150" rx="14" ry="3.5"
+             fill="#7a8a6f" transform="rotate(-22 28 150)"/>
+    <ellipse class="leaf leaf-2" cx="52" cy="128" rx="13" ry="3.2"
+             fill="#7a8a6f" transform="rotate(24 52 128)"/>
+
+    <circle class="bud bud-1" cx="36" cy="98"  r="3.6" fill="#5d6da8"/>
+    <circle class="bud bud-2" cx="44" cy="92"  r="3.6" fill="#5d6da8"/>
+    <circle class="bud bud-3" cx="36" cy="84"  r="3.6" fill="#6b7cb8"/>
+    <circle class="bud bud-4" cx="44" cy="78"  r="3.6" fill="#6b7cb8"/>
+    <circle class="bud bud-5" cx="36" cy="70"  r="3.4" fill="#7d8dc4"/>
+    <circle class="bud bud-6" cx="44" cy="64"  r="3.4" fill="#7d8dc4"/>
+    <circle class="bud bud-7" cx="40" cy="56"  r="3.2" fill="#9aa6d2"/>
+    <circle class="bud bud-8" cx="38" cy="48"  r="2.8" fill="#e8e0d4"/>
+    <circle class="bud bud-9" cx="42" cy="42"  r="2.6" fill="#f5ebe0"/>
+  </svg>
+
+  <div class="container">
+    <div class="greeting" id="greeting">to sandhya portland,</div>
+
+    <div class="line" id="line-0"></div>
+    <div class="line" id="line-1"></div>
+    <div class="line" id="line-2"></div>
+    <div class="line final" id="line-3"></div>
+
+    <div class="polaroid-row">
+      <div class="polaroid-wrap" id="polaroid-1">
+        <div class="polaroid polaroid-left">
+          <div class="polaroid-photo drawing"></div>
+          <div class="polaroid-caption">you (but better).</div>
+        </div>
+      </div>
+      <div class="polaroid-wrap" id="polaroid-2">
+        <div class="polaroid polaroid-right">
+          <div class="polaroid-photo"></div>
+          <div class="polaroid-caption">to be developed.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signoff" id="signoff">
+      from your (hopefully) vadakkan morapaiyyan.
+    </div>
+  </div>
+
+  <div class="filmstrip" id="filmstrip">
+    <div class="frame"></div>
+    <div class="frame"></div>
+    <div class="frame"></div>
+    <div class="frame"></div>
+    <div class="frame"></div>
+  </div>
+  <div class="filmstrip-caption" id="filmcaption">the first roll, still loading.</div>
+
+  <script>
+    const lines = [
+      { id: 'line-0', text: 'you said yes.',                         pre: 1700, hold: 350 },
+      { id: 'line-1', text: 'so. we are growing something.',         pre: 700,  hold: 350 },
+      { id: 'line-2', text: 'in austin. slowly. on purpose.',        pre: 700,  hold: 400 },
+      { id: 'line-3', text: 'payagalam.',                            pre: 900,  hold: 0   },
+    ];
+
+    const CHAR_SPEED = 55;
+
+    function typeText(el, text) {
+      return new Promise(resolve => {
+        el.classList.add('visible');
+        let i = 0;
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+
+        function tick() {
+          el.textContent = text.slice(0, i);
+          el.appendChild(cursor);
+          if (i < text.length) {
+            i++;
+            setTimeout(tick, CHAR_SPEED);
+          } else {
+            resolve();
+          }
+        }
+
+        tick();
+      });
+    }
+
+    function removeCursor(el) {
+      const c = el.querySelector('.cursor');
+      if (c) c.remove();
+    }
+
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+
+    async function runSequence() {
+      await wait(1500);
+      document.getElementById('greeting').classList.add('visible');
+
+      for (let i = 0; i < lines.length; i++) {
+        const { id, text, pre, hold } = lines[i];
+        const el = document.getElementById(id);
+        await wait(pre);
+        await typeText(el, text);
+
+        if (i < lines.length - 1) {
+          await wait(hold);
+          removeCursor(el);
+        }
+      }
+
+      await wait(900);
+      document.getElementById('polaroid-1').classList.add('visible');
+
+      await wait(550);
+      document.getElementById('polaroid-2').classList.add('visible');
+
+      await wait(800);
+      document.getElementById('signoff').classList.add('visible');
+
+      await wait(700);
+      document.getElementById('filmstrip').classList.add('visible');
+
+      await wait(400);
+      document.getElementById('filmcaption').classList.add('visible');
+    }
+
+    runSequence();
+  </script>
+</body>
+</html>
