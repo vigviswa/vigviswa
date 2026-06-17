@@ -5,795 +5,672 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>பிறந்தநாள் வாழ்த்துக்கள்</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Caveat:wght@400;500&family=UnifrakturMaguntia&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Caveat:wght@400;500;600&family=UnifrakturMaguntia&display=swap');
 
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #060608;
-      --fog: #0d0e12;
-      --cream: #e8e0d4;
-      --dim: rgba(232, 224, 212, 0.45);
+      --bg:    #060608;
       --amber: #c8922a;
-      --amber-glow: rgba(200, 146, 42, 0.18);
-      --door-locked: #111114;
-      --door-open: #1a1208;
+      --cream: #e8e0d4;
+      --dim:   rgba(232, 224, 212, 0.4);
     }
 
     html, body {
-      height: 100%;
-      overflow-x: hidden;
-    }
-
-    body {
+      width: 100%; height: 100%;
+      overflow: hidden;
       background: var(--bg);
       color: var(--cream);
       font-family: 'Cormorant Garamond', Georgia, serif;
-      min-height: 100vh;
-      position: relative;
+      user-select: none;
     }
 
-    /* ── FOG LAYERS ─────────────────────────────────────────────── */
+    /* ── SCENE ─────────────────────────────────────────────────── */
 
-    .fog-layer {
+    .scene {
       position: fixed;
       inset: 0;
-      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* back wall gradient */
+    .scene::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 100% 60% at 50% 0%,   #0e0b14 0%, transparent 70%),
+        radial-gradient(ellipse 80%  50% at 50% 100%,  #080605 0%, transparent 60%);
       z-index: 0;
     }
 
-    .fog-layer::before,
-    .fog-layer::after {
+    /* vignette */
+    .scene::after {
       content: '';
       position: absolute;
       inset: 0;
+      background: radial-gradient(ellipse 85% 85% at 50% 50%,
+        transparent 35%, rgba(3,2,5,0.55) 70%, rgba(3,2,5,0.9) 100%);
+      z-index: 0;
+      pointer-events: none;
     }
 
-    .fog-layer::before {
-      background:
-        radial-gradient(ellipse 80% 40% at 20% 80%, rgba(20, 18, 30, 0.7) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 30% at 80% 90%, rgba(15, 14, 22, 0.6) 0%, transparent 60%);
-      animation: fog-drift-a 18s ease-in-out infinite alternate;
+    /* ── FLOOR ──────────────────────────────────────────────────── */
+
+    .floor {
+      position: absolute;
+      bottom: 0;
+      left: -10%;
+      right: -10%;
+      height: 46%;
+      background: linear-gradient(to bottom, #0c0905 0%, #060404 100%);
+      clip-path: polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%);
+      z-index: 1;
     }
 
-    .fog-layer::after {
-      background:
-        radial-gradient(ellipse 70% 35% at 50% 95%, rgba(10, 10, 18, 0.8) 0%, transparent 65%);
-      animation: fog-drift-b 24s ease-in-out infinite alternate;
-    }
-
-    @keyframes fog-drift-a {
-      from { transform: translateX(-4%) scaleX(1); }
-      to   { transform: translateX(4%)  scaleX(1.06); }
-    }
-
-    @keyframes fog-drift-b {
-      from { transform: translateX(3%); }
-      to   { transform: translateX(-3%); }
-    }
-
-    /* ── INTRO ──────────────────────────────────────────────────── */
-
-    .intro {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 5rem 2rem 3rem;
-      opacity: 0;
-      animation: fade-in 2s ease 0.6s forwards;
-    }
-
-    .intro-eyebrow {
-      font-size: 0.72rem;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 1.2rem;
-    }
-
-    .intro-title {
-      font-family: 'UnifrakturMaguntia', cursive;
-      font-size: clamp(2rem, 6vw, 3.6rem);
-      color: var(--amber);
-      text-shadow: 0 0 40px rgba(200, 146, 42, 0.4), 0 0 80px rgba(200, 146, 42, 0.15);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-      letter-spacing: 0.04em;
-    }
-
-    .intro-sub {
-      font-size: 1rem;
-      font-weight: 300;
-      font-style: italic;
-      color: var(--dim);
-      max-width: 460px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-
-    .intro-divider {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, var(--amber), transparent);
-      margin: 2.4rem auto 0;
-      opacity: 0.4;
-    }
-
-    @keyframes fade-in {
-      to { opacity: 1; }
-    }
-
-    /* ── CORRIDOR ───────────────────────────────────────────────── */
-
-    .corridor {
-      position: relative;
-      z-index: 2;
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 6rem;
-    }
-
-    /* ── DOOR CARD ──────────────────────────────────────────────── */
-
-    .door-card {
-      margin-bottom: 3.2rem;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: card-rise 0.9s ease forwards;
-    }
-
-    .door-card:nth-child(1) { animation-delay: 1.4s; }
-    .door-card:nth-child(2) { animation-delay: 1.65s; }
-    .door-card:nth-child(3) { animation-delay: 1.9s; }
-    .door-card:nth-child(4) { animation-delay: 2.15s; }
-    .door-card:nth-child(5) { animation-delay: 2.4s; }
-    .door-card:nth-child(6) { animation-delay: 2.65s; }
-
-    @keyframes card-rise {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .door-frame {
-      border: 1px solid rgba(200, 146, 42, 0.12);
-      background: var(--door-locked);
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.6s ease, background 0.6s ease;
-    }
-
-    .door-frame.is-today {
-      border-color: rgba(200, 146, 42, 0.45);
-      background: var(--door-open);
-      box-shadow: 0 0 60px rgba(200, 146, 42, 0.08), inset 0 0 40px rgba(200, 146, 42, 0.04);
-    }
-
-    .door-frame.is-unlocked {
-      border-color: rgba(200, 146, 42, 0.3);
-      background: #120e06;
-    }
-
-    .door-frame.is-birthday {
-      border-color: rgba(200, 146, 42, 0.7);
-      background: #160d04;
-      box-shadow: 0 0 80px rgba(200, 146, 42, 0.15), inset 0 0 60px rgba(200, 146, 42, 0.07);
-    }
-
-    /* candle flicker for today's door */
-    .door-frame.is-today::before,
-    .door-frame.is-birthday::before {
+    .floor::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(to right,
-        transparent 0%, var(--amber) 30%, rgba(255, 200, 80, 0.9) 50%, var(--amber) 70%, transparent 100%);
-      animation: flicker-bar 2.8s ease-in-out infinite;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(90deg,
+          rgba(200,146,42,0.025) 0px, rgba(200,146,42,0.025) 1px,
+          transparent 1px, transparent 60px),
+        repeating-linear-gradient(0deg,
+          rgba(200,146,42,0.018) 0px, rgba(200,146,42,0.018) 1px,
+          transparent 1px, transparent 40px);
     }
 
-    @keyframes flicker-bar {
-      0%, 100% { opacity: 0.7; }
-      25% { opacity: 1; }
-      50% { opacity: 0.5; }
-      75% { opacity: 0.9; }
+    /* ── EMBERS ─────────────────────────────────────────────────── */
+
+    .embers {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 2; overflow: hidden;
     }
 
-    .door-inner {
-      display: flex;
-      align-items: stretch;
-      min-height: 110px;
+    .ember {
+      position: absolute; bottom: -10px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 4px 1px rgba(200,146,42,0.5);
+      animation: ember-rise linear infinite;
+      opacity: 0;
     }
 
-    /* left date column */
-    .door-date {
-      width: 110px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.4rem 1rem;
-      border-right: 1px solid rgba(200, 146, 42, 0.1);
-      position: relative;
+    @keyframes ember-rise {
+      0%   { transform: translateY(0)    translateX(0)                  scale(1);   opacity: 0; }
+      10%  {                                                                         opacity: 0.7; }
+      50%  { transform: translateY(-40vh) translateX(var(--drift))       scale(0.7); opacity: 0.4; }
+      100% { transform: translateY(-90vh) translateX(calc(var(--drift)*1.6)) scale(0.2); opacity: 0; }
     }
 
-    .is-today .door-date,
-    .is-birthday .door-date {
-      border-right-color: rgba(200, 146, 42, 0.3);
+    /* ── HEADER ─────────────────────────────────────────────────── */
+
+    .header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      text-align: center;
+      padding: 2.4rem 2rem 0;
+      pointer-events: none;
+      opacity: 0;
+      animation: fade-up 1.6s ease 0.4s forwards;
     }
 
-    .door-month {
-      font-size: 0.6rem;
-      letter-spacing: 0.35em;
+    .header-eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.45em;
       text-transform: uppercase;
       color: var(--dim);
-    }
-
-    .door-day-num {
-      font-family: 'UnifrakturMaguntia', cursive;
-      font-size: 2.8rem;
-      color: var(--amber);
-      line-height: 1;
-      margin: 0.2rem 0;
-    }
-
-    .is-locked .door-day-num {
-      color: rgba(200, 146, 42, 0.25);
-    }
-
-    .door-label {
-      font-size: 0.58rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--dim);
-      opacity: 0.6;
-    }
-
-    /* lock icon */
-    .door-lock {
-      font-size: 1rem;
-      margin-top: 0.6rem;
-      color: rgba(232, 224, 212, 0.2);
-    }
-
-    /* right content column */
-    .door-content {
-      flex: 1;
-      padding: 1.4rem 1.6rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .door-status-line {
-      font-size: 0.65rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--dim);
-      opacity: 0.5;
       margin-bottom: 0.6rem;
     }
 
-    .is-today .door-status-line,
-    .is-birthday .door-status-line {
+    .header-title {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: clamp(1.6rem, 5vw, 3rem);
       color: var(--amber);
-      opacity: 0.8;
+      text-shadow: 0 0 40px rgba(200,146,42,0.5), 0 0 100px rgba(200,146,42,0.2);
+      line-height: 1.1;
     }
 
-    .door-title {
-      font-size: 1.35rem;
-      font-weight: 300;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.5rem;
-    }
-
-    .is-locked .door-title {
-      color: rgba(232, 224, 212, 0.2);
-      font-style: italic;
-    }
-
-    .door-excerpt {
-      font-size: 0.88rem;
-      font-weight: 300;
-      color: var(--dim);
-      line-height: 1.7;
-    }
-
-    .is-locked .door-excerpt {
-      color: rgba(232, 224, 212, 0.15);
-    }
-
-    /* open button */
-    .door-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1.1rem;
-      font-family: 'Caveat', cursive;
-      font-size: 1.1rem;
-      letter-spacing: 0.04em;
-      color: var(--amber);
-      background: none;
-      border: 1px solid rgba(200, 146, 42, 0.35);
-      padding: 0.4rem 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      align-self: flex-start;
-    }
-
-    .door-btn:hover {
-      background: rgba(200, 146, 42, 0.08);
-      border-color: rgba(200, 146, 42, 0.7);
-      box-shadow: 0 0 20px rgba(200, 146, 42, 0.12);
-    }
-
-    /* gift tags (multiple gifts per day) */
-    .gift-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
+    .header-counter {
       margin-top: 0.7rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(200,146,42,0.5);
     }
 
-    .gift-tag {
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      color: rgba(200, 146, 42, 0.7);
-      border: 1px solid rgba(200, 146, 42, 0.25);
-      padding: 0.15rem 0.55rem;
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* already-unlocked gift reveal inline */
-    .gift-reveal {
-      margin-top: 1.2rem;
-      padding: 1.2rem;
-      background: rgba(200, 146, 42, 0.05);
-      border-left: 2px solid rgba(200, 146, 42, 0.4);
-    }
+    /* ── GIFT OBJECTS ───────────────────────────────────────────── */
 
-    .gift-reveal-name {
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: #f0d08a;
-      margin-bottom: 0.5rem;
-    }
-
-    .gift-reveal-note {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--dim);
-      line-height: 1.75;
-    }
-
-    /* ── UNLOCK MODAL ───────────────────────────────────────────── */
-
-    .modal-backdrop {
-      position: fixed;
+    .room {
+      position: absolute;
       inset: 0;
-      background: rgba(4, 4, 6, 0.88);
-      z-index: 100;
+      z-index: 5;
+    }
+
+    .gift-obj {
+      position: absolute;
+      transform: translate(-50%, 50%);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+
+    .gift-obj:hover .obj-dot:not(.found) {
+      transform: scale(1.3);
+    }
+
+    .obj-dot {
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,210,100,0.9), var(--amber));
+      box-shadow: 0 0 14px 5px rgba(200,146,42,0.4), 0 0 40px 10px rgba(200,146,42,0.15);
+      animation: pulse-obj 2.6s ease-in-out infinite;
+      transition: transform 0.25s ease, background 0.5s ease, box-shadow 0.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .obj-dot.found {
+      background: radial-gradient(circle at 35% 35%, rgba(200,180,130,0.4), rgba(160,120,40,0.3));
+      box-shadow: 0 0 6px 2px rgba(200,146,42,0.12);
+      animation: none;
+    }
+
+    .obj-dot.found::after {
+      content: '✦';
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-      backdrop-filter: blur(4px);
+      font-size: 0.55em;
+      color: rgba(200,146,42,0.6);
     }
 
-    .modal-backdrop.open {
+    @keyframes pulse-obj {
+      0%, 100% { box-shadow: 0 0 14px 5px rgba(200,146,42,0.4), 0 0 40px 10px rgba(200,146,42,0.15); }
+      50%       { box-shadow: 0 0 22px 8px rgba(200,146,42,0.6), 0 0 60px 16px rgba(200,146,42,0.25); }
+    }
+
+    .obj-label {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Caveat', cursive;
+      font-size: 1rem;
+      color: rgba(232,224,212,0.75);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      text-shadow: 0 0 20px rgba(200,146,42,0.5);
+    }
+
+    .gift-obj:hover .obj-label {
+      opacity: 1;
+    }
+
+    .obj-label.found-label {
+      color: rgba(200,146,42,0.4);
+      font-style: italic;
+    }
+
+    /* ── CANDLES (decoration) ───────────────────────────────────── */
+
+    .candle {
+      position: absolute;
+      bottom: 44%;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .candle-left  { left: 4%; }
+    .candle-right { right: 4%; }
+
+    .candle-body {
+      width: 6px;
+      height: 40px;
+      background: linear-gradient(to bottom, #e8dcc8, #c8b89a);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .candle-flame {
+      width: 8px;
+      height: 14px;
+      background: radial-gradient(ellipse at bottom, #fff 0%, #ffd060 40%, rgba(200,146,42,0.4) 80%, transparent 100%);
+      border-radius: 50% 50% 30% 30%;
+      margin: 0 auto;
+      position: relative;
+      top: -2px;
+      animation: flicker 1.8s ease-in-out infinite alternate;
+      filter: blur(0.5px);
+    }
+
+    .candle-glow {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,200,60,0.25) 0%, transparent 70%);
+      animation: flicker 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%   { transform: translateX(-50%) scaleX(1)    scaleY(1);    opacity: 0.9; }
+      30%  { transform: translateX(-50%) scaleX(0.92) scaleY(1.04); opacity: 1; }
+      60%  { transform: translateX(-50%) scaleX(1.05) scaleY(0.96); opacity: 0.85; }
+      100% { transform: translateX(-50%) scaleX(0.97) scaleY(1.02); opacity: 0.95; }
+    }
+
+    /* ── FOUND-ALL BANNER ───────────────────────────────────────── */
+
+    .found-all {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4,3,8,0.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.5s ease;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .found-all.visible {
       opacity: 1;
       pointer-events: all;
     }
 
-    .modal-box {
-      max-width: 480px;
-      width: calc(100% - 3rem);
-      background: #0e0c0a;
-      border: 1px solid rgba(200, 146, 42, 0.4);
-      padding: 2.4rem 2.4rem 2rem;
-      position: relative;
-      box-shadow: 0 0 80px rgba(200, 146, 42, 0.12), 0 30px 80px rgba(0,0,0,0.8);
-      transform: translateY(12px);
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .modal-backdrop.open .modal-box {
-      transform: translateY(0);
-    }
-
-    .modal-corner {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-color: rgba(200, 146, 42, 0.5);
-      border-style: solid;
-    }
-
-    .modal-corner.tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-    .modal-corner.tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
-    .modal-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
-    .modal-corner.br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-
-    .modal-eyebrow {
-      font-size: 0.62rem;
-      letter-spacing: 0.38em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.5rem;
-      opacity: 0.8;
-    }
-
-    .modal-date-heading {
+    .found-all-title {
       font-family: 'UnifrakturMaguntia', cursive;
-      font-size: 1.8rem;
-      color: var(--cream);
-      margin-bottom: 0.4rem;
-      line-height: 1.2;
-    }
-
-    .modal-prompt {
-      font-size: 0.95rem;
-      font-style: italic;
-      font-weight: 300;
-      color: var(--dim);
-      line-height: 1.7;
-      margin-bottom: 1.6rem;
-    }
-
-    .modal-input-wrap {
-      position: relative;
-      margin-bottom: 1rem;
-    }
-
-    .modal-input {
-      width: 100%;
-      background: rgba(200, 146, 42, 0.04);
-      border: 1px solid rgba(200, 146, 42, 0.3);
-      color: var(--cream);
-      font-family: 'Caveat', cursive;
-      font-size: 1.25rem;
-      letter-spacing: 0.06em;
-      padding: 0.75rem 1rem;
-      outline: none;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .modal-input:focus {
-      border-color: rgba(200, 146, 42, 0.7);
-      box-shadow: 0 0 20px rgba(200, 146, 42, 0.08);
-    }
-
-    .modal-input.error {
-      border-color: rgba(180, 60, 60, 0.7);
-      animation: shake 0.4s ease;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-6px); }
-      40% { transform: translateX(6px); }
-      60% { transform: translateX(-4px); }
-      80% { transform: translateX(4px); }
-    }
-
-    .modal-error-msg {
-      font-size: 0.78rem;
-      font-style: italic;
-      color: rgba(180, 80, 80, 0.85);
-      margin-top: 0.4rem;
-      min-height: 1.2em;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 0.8rem;
-      margin-top: 1.2rem;
-    }
-
-    .btn-reveal {
-      flex: 1;
-      background: rgba(200, 146, 42, 0.1);
-      border: 1px solid rgba(200, 146, 42, 0.5);
+      font-size: clamp(2rem, 6vw, 3.5rem);
       color: var(--amber);
-      font-family: 'Caveat', cursive;
-      font-size: 1.15rem;
-      letter-spacing: 0.06em;
-      padding: 0.65rem 1.2rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      text-shadow: 0 0 60px rgba(200,146,42,0.6);
+      margin-bottom: 1.4rem;
     }
 
-    .btn-reveal:hover {
-      background: rgba(200, 146, 42, 0.18);
-      box-shadow: 0 0 24px rgba(200, 146, 42, 0.15);
-    }
-
-    .btn-close {
-      background: none;
-      border: 1px solid rgba(232, 224, 212, 0.15);
-      color: rgba(232, 224, 212, 0.4);
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.65rem 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-close:hover {
-      border-color: rgba(232, 224, 212, 0.3);
-      color: rgba(232, 224, 212, 0.7);
-    }
-
-    /* ── REVEAL ANIMATION ───────────────────────────────────────── */
-
-    .reveal-flash {
-      position: fixed;
-      inset: 0;
-      background: rgba(200, 146, 42, 0.08);
-      z-index: 200;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .reveal-flash.flash {
-      animation: light-bloom 1.4s ease forwards;
-    }
-
-    @keyframes light-bloom {
-      0%   { opacity: 0; }
-      15%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* ── BIRTHDAY FINALE ────────────────────────────────────────── */
-
-    .birthday-banner {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 3rem 2rem 5rem;
-      display: none;
-    }
-
-    .birthday-banner.visible {
-      display: block;
-      animation: fade-in 2s ease forwards;
-    }
-
-    .birthday-banner-title {
-      font-family: 'UnifrakturMaguntia', cursive;
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      color: var(--amber);
-      text-shadow: 0 0 60px rgba(200, 146, 42, 0.5);
-      margin-bottom: 1.2rem;
-    }
-
-    .birthday-banner-note {
+    .found-all-note {
       font-size: 1.1rem;
       font-style: italic;
       font-weight: 300;
       color: var(--dim);
-      max-width: 500px;
-      margin: 0 auto;
       line-height: 1.9;
+      max-width: 440px;
     }
 
-    /* ── FOOTER ─────────────────────────────────────────────────── */
+    /* ── MODAL ──────────────────────────────────────────────────── */
 
-    .page-footer {
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(4,3,8,0.85);
+      z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      max-width: 440px;
+      width: calc(100% - 3rem);
+      background: #0c0a08;
+      border: 1px solid rgba(200,146,42,0.35);
+      padding: 2.2rem 2.2rem 1.8rem;
+      position: relative;
+      box-shadow: 0 0 80px rgba(200,146,42,0.1), 0 30px 80px rgba(0,0,0,0.8);
+      transform: translateY(10px) scale(0.98);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .modal-backdrop.open .modal-box { transform: translateY(0) scale(1); }
+
+    .modal-corner { position: absolute; width: 12px; height: 12px; border-color: rgba(200,146,42,0.45); border-style: solid; }
+    .modal-corner.tl { top:-1px; left:-1px;   border-width: 1px 0 0 1px; }
+    .modal-corner.tr { top:-1px; right:-1px;  border-width: 1px 1px 0 0; }
+    .modal-corner.bl { bottom:-1px; left:-1px;  border-width: 0 0 1px 1px; }
+    .modal-corner.br { bottom:-1px; right:-1px; border-width: 0 1px 1px 0; }
+
+    .modal-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: rgba(200,146,42,0.7); margin-bottom: 0.4rem;
+    }
+
+    .modal-heading {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 1.7rem; color: var(--cream); margin-bottom: 0.3rem; line-height: 1.2;
+    }
+
+    .modal-prompt {
+      font-size: 0.95rem; font-style: italic; font-weight: 300;
+      color: var(--dim); line-height: 1.7; margin-bottom: 1.4rem;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: rgba(200,146,42,0.04);
+      border: 1px solid rgba(200,146,42,0.28);
+      color: var(--cream);
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem; letter-spacing: 0.06em;
+      padding: 0.7rem 0.9rem;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-input:focus {
+      border-color: rgba(200,146,42,0.6);
+      box-shadow: 0 0 18px rgba(200,146,42,0.08);
+    }
+
+    .modal-input.error { border-color: rgba(180,60,60,0.7); animation: shake 0.4s ease; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
+    }
+
+    .modal-error { font-size: 0.78rem; font-style: italic; color: rgba(180,80,80,0.85); min-height: 1.2em; }
+
+    .modal-reveal-text {
+      display: none;
+      margin-top: 1.2rem;
+      padding: 1rem 1.1rem;
+      background: rgba(200,146,42,0.05);
+      border-left: 2px solid rgba(200,146,42,0.4);
+      font-size: 0.95rem; font-style: italic; font-weight: 300;
+      color: rgba(232,224,212,0.82); line-height: 1.75;
+    }
+
+    .modal-reveal-text.visible { display: block; animation: fade-up 0.6s ease forwards; }
+
+    .modal-actions { display: flex; gap: 0.7rem; margin-top: 1.2rem; }
+
+    .btn-open {
+      flex: 1;
+      background: rgba(200,146,42,0.1); border: 1px solid rgba(200,146,42,0.45);
+      color: var(--amber); font-family: 'Caveat', cursive; font-size: 1.1rem;
+      letter-spacing: 0.05em; padding: 0.6rem 1rem; cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-open:hover { background: rgba(200,146,42,0.18); box-shadow: 0 0 20px rgba(200,146,42,0.14); }
+
+    .btn-close {
+      background: none; border: 1px solid rgba(232,224,212,0.15);
+      color: rgba(232,224,212,0.38); font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.6rem 0.9rem; cursor: pointer; transition: all 0.3s ease;
+    }
+
+    .btn-close:hover { border-color: rgba(232,224,212,0.3); color: rgba(232,224,212,0.65); }
+
+    .reveal-flash {
+      position: fixed; inset: 0;
+      background: rgba(200,146,42,0.07);
+      z-index: 200; pointer-events: none; opacity: 0;
+    }
+
+    .reveal-flash.flash { animation: light-bloom 1.6s ease forwards; }
+
+    @keyframes light-bloom {
+      0%  { opacity: 0; }
+      12% { opacity: 1; }
+      100%{ opacity: 0; }
+    }
+
+    /* ── BATS ───────────────────────────────────────────────────── */
+
+    .bat {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: linear-gradient(to top, #060608, transparent);
-      z-index: 1;
       pointer-events: none;
+      z-index: 3;
+      opacity: 0;
     }
 
-    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+    @keyframes bat-fly {
+      0%   { transform: translateX(0)     translateY(0px)   scaleX(1);  opacity: 0; }
+      5%   {                                                              opacity: var(--bat-op); }
+      25%  { transform: translateX(25vw)  translateY(-28px) scaleX(1); }
+      50%  { transform: translateX(52vw)  translateY(12px)  scaleX(1); }
+      75%  { transform: translateX(76vw)  translateY(-18px) scaleX(1); }
+      95%  {                                                              opacity: var(--bat-op); }
+      100% { transform: translateX(108vw) translateY(6px)   scaleX(1);  opacity: 0; }
+    }
+
+    @keyframes bat-fly-rev {
+      0%   { transform: translateX(0)      translateY(0px)   scaleX(-1); opacity: 0; }
+      5%   {                                                               opacity: var(--bat-op); }
+      25%  { transform: translateX(-25vw)  translateY(-22px) scaleX(-1); }
+      50%  { transform: translateX(-52vw)  translateY(15px)  scaleX(-1); }
+      75%  { transform: translateX(-76vw)  translateY(-10px) scaleX(-1); }
+      95%  {                                                               opacity: var(--bat-op); }
+      100% { transform: translateX(-108vw) translateY(8px)   scaleX(-1); opacity: 0; }
+    }
+
+    /* ── DOGS ───────────────────────────────────────────────────── */
+
+    .dog {
+      position: fixed;
+      bottom: 2%;
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0;
+    }
+
+    @keyframes dog-run {
+      0%   { transform: translateX(0);       opacity: 0; }
+      4%   {                                  opacity: var(--dog-op); }
+      96%  {                                  opacity: var(--dog-op); }
+      100% { transform: translateX(110vw);   opacity: 0; }
+    }
+
+    @keyframes dog-run-rev {
+      0%   { transform: translateX(0)  scaleX(-1); opacity: 0; }
+      4%   {                                        opacity: var(--dog-op); }
+      96%  {                                        opacity: var(--dog-op); }
+      100% { transform: translateX(-110vw) scaleX(-1); opacity: 0; }
+    }
+
+    @keyframes dog-legs {
+      0%, 100% { d: path('M 2 12 L 0 18 M 6 12 L 8 18 M 10 12 L 8 18 M 14 12 L 16 18'); }
+      25%      { d: path('M 2 12 L 1 18 M 6 12 L 5 18 M 10 12 L 11 18 M 14 12 L 15 18'); }
+      50%      { d: path('M 2 12 L 4 18 M 6 12 L 4 18 M 10 12 L 12 18 M 14 12 L 12 18'); }
+      75%      { d: path('M 2 12 L 1 18 M 6 12 L 7 18 M 10 12 L 9 18 M 14 12 L 15 18'); }
+    }
 
     @media (max-width: 560px) {
-      .intro { padding: 3.5rem 1.5rem 2rem; }
-      .door-date { width: 80px; padding: 1rem 0.7rem; }
-      .door-day-num { font-size: 2.2rem; }
-      .door-content { padding: 1rem 1.2rem; }
-      .door-title { font-size: 1.15rem; }
-      .modal-box { padding: 1.8rem 1.5rem 1.5rem; }
+      .modal-box { padding: 1.6rem 1.4rem 1.4rem; }
+      .candle { display: none; }
+      .header { padding-top: 1.6rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .fog-layer::before, .fog-layer::after { animation: none; }
-      .door-card { animation: none; opacity: 1; transform: none; }
-      .intro { animation: none; opacity: 1; }
+      .obj-dot { animation: none; }
+      .ember   { animation: none; opacity: 0; }
+      .header  { animation: none; opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <div class="fog-layer" aria-hidden="true"></div>
+  <div class="scene">
+    <!-- Background and floor -->
+    <div class="floor"></div>
+
+    <!-- Candles -->
+    <div class="candle candle-left">
+      <div class="candle-glow"></div>
+      <div class="candle-flame"></div>
+      <div class="candle-body"></div>
+    </div>
+    <div class="candle candle-right">
+      <div class="candle-glow"></div>
+      <div class="candle-flame"></div>
+      <div class="candle-body"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <p class="header-eyebrow">a museum of us</p>
+      <h1 class="header-title">happy birthday, strawberrina.</h1>
+      <p class="header-counter" id="counter">0 of 10 found</p>
+    </div>
+
+    <!-- Exploration room -->
+    <div class="room" id="room"></div>
+  </div>
+
+  <div class="embers" id="embers" aria-hidden="true"></div>
   <div class="reveal-flash" id="revealFlash"></div>
 
-  <!-- ── INTRO ──────────────────────────────────────────────────── -->
-  <div class="intro">
-    <p class="intro-eyebrow">a private collection</p>
-    <h1 class="intro-title">The Museum of Us</h1>
-    <p class="intro-sub">
-      six rooms. nine things i found that made me think of you.<br>
-      one opens each day. you know what to say.
-    </p>
-    <div class="intro-divider"></div>
-  </div>
-
-  <!-- ── CORRIDOR ────────────────────────────────────────────────── -->
-  <div class="corridor" id="corridor">
-    <!-- door cards injected by JS -->
-  </div>
-
-  <!-- ── BIRTHDAY FINALE ─────────────────────────────────────────── -->
-  <div class="birthday-banner" id="birthdayBanner">
-    <p class="intro-eyebrow">june 22</p>
-    <h2 class="birthday-banner-title">Happy Birthday, Sandhya Portland.</h2>
-    <p class="birthday-banner-note">
-      <!-- FILL IN: your birthday message to her -->
-      every room is open now.<br>
-      every door, every light.<br>
-      i hope it feels like something.<br>
+  <!-- Found-all screen -->
+  <div class="found-all" id="foundAll">
+    <h2 class="found-all-title">you found everything.</h2>
+    <p class="found-all-note">
+      <!-- FILL IN: your closing birthday message -->
+      every room. every light. every thing i found that made me think of you.<br><br>
+      happy birthday, sandhya portland.<br>
       — your vadakkan morapaiyyan
     </p>
   </div>
 
-  <div class="page-footer" aria-hidden="true"></div>
-
-  <!-- ── UNLOCK MODAL ────────────────────────────────────────────── -->
-  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true">
     <div class="modal-box">
       <span class="modal-corner tl"></span>
       <span class="modal-corner tr"></span>
       <span class="modal-corner bl"></span>
       <span class="modal-corner br"></span>
-      <p class="modal-eyebrow" id="modalEyebrow">june 00</p>
-      <h2 class="modal-date-heading" id="modalHeading">Room Title</h2>
-      <p class="modal-prompt" id="modalPrompt">what's the word?</p>
-      <div class="modal-input-wrap">
-        <input
-          class="modal-input"
-          id="modalInput"
-          type="text"
-          placeholder="type it here..."
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <p class="modal-error-msg" id="modalError"></p>
+      <p class="modal-eyebrow" id="modalEyebrow">museum</p>
+      <h2 class="modal-heading" id="modalHeading">???</h2>
+      <p class="modal-prompt" id="modalPrompt">what is the word?</p>
+
+      <div id="modalInputWrap">
+        <input class="modal-input" id="modalInput" type="text"
+               placeholder="type it here..." autocomplete="off" spellcheck="false"/>
+        <p class="modal-error" id="modalError"></p>
+        <div class="modal-actions">
+          <button class="btn-open" id="btnReveal">open</button>
+          <button class="btn-close" id="btnClose">leave</button>
+        </div>
       </div>
-      <div class="modal-actions">
-        <button class="btn-reveal" id="btnReveal">open the door</button>
-        <button class="btn-close" id="btnClose">leave</button>
-      </div>
+
+      <div class="modal-reveal-text" id="revealText"></div>
     </div>
   </div>
 
   <script>
     // ─────────────────────────────────────────────────────────────
-    // GIFT DATA
-    // Each day can have 1 or 2 gifts.
-    // Fill in: title, note, phrase (secret word/phrase she types),
-    //          prompt (the hint shown in the modal - keep it cryptic/sweet).
-    // The phrase check is case-insensitive and ignores extra spaces.
+    // GIFTS — fill in phrase and note for each
+    // label:  what appears on hover (cryptic, not revealing)
+    // prompt: shown in the modal (a hint to figure out the code)
+    // phrase: the code she types
+    // note:   revealed text after unlock (hint to WHERE the gift is)
+    // pos:    position in the room [left%, bottom%]
+    // size:   dot size in px (larger = feels closer)
     // ─────────────────────────────────────────────────────────────
 
-    const DAYS = [
+    const GIFTS = [
       {
-        date: '2026-06-17',
-        label: 'June 17',
-        dayNum: '17',
-        roomName: 'The First Room',  // FILL IN: name for this day's exhibit
-        gifts: [
-          {
-            title: 'Gift One',        // FILL IN: name of the gift
-            note:  'i got this because...', // FILL IN: your note about it
-            phrase: 'secret word',    // FILL IN: the phrase she types to unlock
-            prompt: 'what did i call you the first time?', // FILL IN: hint/riddle in the modal
-          },
-        ],
+        id: 'g1',
+        label:  'four hands',
+        prompt: 'how warm is warm enough?',
+        phrase: '89 degrees',
+        note:   'two are less for me. so i got us four. look where you keep your feet warm.',
+        pos: [14, 42], size: 16,
       },
       {
-        date: '2026-06-18',
-        label: 'June 18',
-        dayNum: '18',
-        roomName: 'The Second Room',
-        gifts: [
-          {
-            title: 'Gift Two',
-            note:  'i got this because...',
-            phrase: 'secret word',
-            prompt: 'what\'s the word only we use?',
-          },
-        ],
+        id: 'g2',
+        label:  'something you beat me at',
+        prompt: 'what color were your pieces?',
+        phrase: 'yellow',
+        note:   'you won. i would lose to you again. look where games live.',
+        pos: [32, 55], size: 13,
       },
       {
-        date: '2026-06-19',
-        label: 'June 19',
-        dayNum: '19',
-        roomName: 'The Third Room',
-        gifts: [
-          {
-            title: 'Gift Three',
-            note:  'i got this because...',
-            phrase: 'secret word',
-            prompt: 'name the place we first said it.',
-          },
-        ],
+        id: 'g3',
+        label:  'something that watches',
+        prompt: 'what can you finally do now?',
+        phrase: 'sleep',
+        note:   'i fixed the thing that watches. check the door.',
+        pos: [20, 30], size: 18,
       },
       {
-        date: '2026-06-20',
-        label: 'June 20',
-        dayNum: '20',
-        roomName: 'The Fourth Room',
-        gifts: [
-          {
-            title: 'Gift Four',
-            note:  'i got this because...',
-            phrase: 'secret word',
-            prompt: 'what are we afraid of, together?',
-          },
-          {
-            title: 'Gift Five',
-            note:  'i got this because...',
-            phrase: 'secret word 2',
-            prompt: 'and the other thing?',
-          },
-        ],
+        id: 'g4',
+        label:  'something strawberry',
+        prompt: 'what would you say if you were lady bridgerton?',
+        phrase: 'sire-my-heir',
+        note:   'tillamook. strawberry. sire — my heir. it is in your bag.',
+        pos: [50, 62], size: 11,
       },
       {
-        date: '2026-06-21',
-        label: 'June 21',
-        dayNum: '21',
-        roomName: 'The Fifth Room',
-        gifts: [
-          {
-            title: 'Gift Six',
-            note:  'i got this because...',
-            phrase: 'secret word',
-            prompt: 'what\'s the last word of payagalam?',
-          },
-          {
-            title: 'Gift Seven',
-            note:  'i got this because...',
-            phrase: 'secret word 2',
-            prompt: 'what do you call me when i\'m being dramatic?',
-          },
-        ],
+        id: 'g5',
+        label:  'something i promised',
+        prompt: 'what did i tell you i would get for your birthday?',
+        phrase: 'trash',
+        note:   'i told you i would. a promise is a promise. it is on your desk.',
+        pos: [68, 35], size: 17,
       },
       {
-        date: '2026-06-22',
-        label: 'June 22',
-        dayNum: '22',
-        roomName: 'The Last Room',
-        isBirthday: true,
-        gifts: [
-          {
-            title: 'Gift Eight',
-            note:  'i got this because...',
-            phrase: 'secret word',
-            prompt: 'what day is it?',
-          },
-          {
-            title: 'Gift Nine',
-            note:  'i got this because...',
-            phrase: 'secret word 2',
-            prompt: 'say my name.',
-          },
-        ],
+        id: 'g6',
+        label:  'something for the dark',
+        prompt: 'what holds your hair up in the dark?',
+        phrase: 'scrunchie',
+        note:   'the dark suits you. look where your hair rests.',
+        pos: [80, 50], size: 12,
+      },
+      {
+        id: 'g7',
+        label:  'something golden',
+        prompt: 'what do i call the golden one?',
+        phrase: 'kanakzz',
+        note:   'kanaka. golden. i am the lucky one. look in your kitchen.',
+        pos: [58, 44], size: 14,
+      },
+      {
+        id: 'g8',
+        label:  'something padayappa red',
+        prompt: 'who wore red that night?',
+        phrase: 'padayappa',
+        note:   'padayappa red. you know where. you know when.',
+        pos: [88, 65], size: 10,
+      },
+      {
+        id: 'g9',
+        label:  'something that never ends',
+        prompt: 'what is the shape of us?',
+        phrase: 'infinity',
+        note:   'the loop with no end. look where you keep what you wear close.',
+        pos: [42, 28], size: 19,
+      },
+      {
+        id: 'g10',
+        label:  'the before',
+        prompt: 'what city was on my shirt the first time we spoke?',
+        phrase: 'nypd',
+        note:   'the before. it is in your closet, folded.',
+        pos: [74, 24], size: 15,
       },
     ];
 
@@ -801,151 +678,118 @@
     // STATE
     // ─────────────────────────────────────────────────────────────
 
-    const STORAGE_KEY = 'museum-unlocked-v1';
+    const KEY = 'museum-room-v1';
+
+    if (new URLSearchParams(window.location.search).has('reset')) {
+      localStorage.removeItem(KEY);
+      window.location.href = window.location.pathname;
+    }
 
     function getUnlocked() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      } catch { return {}; }
+      try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+      catch { return {}; }
     }
 
-    function setUnlocked(state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
+    function save(state) { localStorage.setItem(KEY, JSON.stringify(state)); }
 
-    function todayStr() {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
-    }
-
-    function dayStatus(dayDate) {
-      const today = todayStr();
-      if (dayDate > today) return 'locked';
-      if (dayDate === today) return 'today';
-      return 'past';
-    }
-
-    // ─────────────────────────────────────────────────────────────
-    // RENDER CORRIDOR
-    // ─────────────────────────────────────────────────────────────
-
-    const corridor = document.getElementById('corridor');
     const unlocked = getUnlocked();
 
-    function renderGiftReveal(gift, giftKey) {
-      if (!unlocked[giftKey]) return '';
-      return `
-        <div class="gift-reveal">
-          <div class="gift-reveal-name">${gift.title}</div>
-          <div class="gift-reveal-note">${gift.note}</div>
-        </div>
-      `;
+    // ─────────────────────────────────────────────────────────────
+    // RENDER ROOM
+    // ─────────────────────────────────────────────────────────────
+
+    const roomEl   = document.getElementById('room');
+    const counterEl = document.getElementById('counter');
+
+    function updateCounter() {
+      const n = Object.keys(unlocked).length;
+      counterEl.textContent = `${n} of ${GIFTS.length} found`;
+      if (n === GIFTS.length) {
+        setTimeout(() => document.getElementById('foundAll').classList.add('visible'), 1200);
+      }
     }
 
-    DAYS.forEach((day, di) => {
-      const status = dayStatus(day.date);
-      const isLocked = status === 'locked';
-      const isToday = status === 'today';
-      const isBirthday = !!day.isBirthday;
+    function renderRoom() {
+      roomEl.innerHTML = '';
+      GIFTS.forEach((g, i) => {
+        const done = !!unlocked[g.id];
+        const [lp, bp] = g.pos;
 
-      const allUnlocked = day.gifts.every((_, gi) => unlocked[`${day.date}-${gi}`]);
+        const obj = document.createElement('div');
+        obj.className = 'gift-obj';
+        obj.dataset.idx = i;
+        obj.style.cssText = `left:${lp}%; bottom:${bp}%;`;
 
-      let frameClass = 'door-frame';
-      if (isLocked) frameClass += ' is-locked';
-      if (isToday && !isBirthday) frameClass += ' is-today';
-      if (isBirthday) frameClass += ' is-birthday';
-      if (!isLocked && allUnlocked) frameClass += ' is-unlocked';
+        const dot = document.createElement('div');
+        dot.className = 'obj-dot' + (done ? ' found' : '');
+        dot.style.width  = g.size + 'px';
+        dot.style.height = g.size + 'px';
+        dot.style.animationDelay = (i * 0.38) + 's';
 
-      const statusText = isLocked
-        ? 'sealed'
-        : isBirthday
-        ? 'her birthday'
-        : isToday
-        ? 'tonight'
-        : allUnlocked ? 'opened' : 'awaiting';
+        const label = document.createElement('div');
+        label.className = 'obj-label' + (done ? ' found-label' : '');
+        label.textContent = done ? 'found.' : g.label;
 
-      const giftTags = isLocked
-        ? ''
-        : `<div class="gift-tags">${day.gifts.map((g, gi) => {
-            const key = `${day.date}-${gi}`;
-            const done = !!unlocked[key];
-            return `<span class="gift-tag">${done ? g.title : '???'}</span>`;
-          }).join('')}</div>`;
+        obj.appendChild(dot);
+        obj.appendChild(label);
+        if (!done) obj.addEventListener('click', () => openModal(i));
+        roomEl.appendChild(obj);
+      });
+      updateCounter();
+    }
 
-      const giftReveals = day.gifts.map((g, gi) =>
-        renderGiftReveal(g, `${day.date}-${gi}`)
-      ).join('');
+    renderRoom();
 
-      const openBtn = (!isLocked && !allUnlocked)
-        ? `<button class="door-btn" data-day="${di}">open the door →</button>`
-        : '';
+    // ─────────────────────────────────────────────────────────────
+    // PARALLAX
+    // ─────────────────────────────────────────────────────────────
 
-      const lockIcon = isLocked ? '<div class="door-lock">&#9775;</div>' : '';
-
-      corridor.innerHTML += `
-        <div class="door-card" data-day="${di}">
-          <div class="${frameClass}">
-            <div class="door-inner">
-              <div class="door-date">
-                <span class="door-month">june</span>
-                <span class="door-day-num">${day.dayNum}</span>
-                <span class="door-label">${statusText}</span>
-                ${lockIcon}
-              </div>
-              <div class="door-content">
-                <div class="door-status-line">${isBirthday ? '— her birthday —' : `room ${di + 1} of 6`}</div>
-                <div class="door-title">${isLocked ? '[ sealed ]' : day.roomName}</div>
-                <div class="door-excerpt">${isLocked ? 'this room opens on ' + day.label + '.' : day.gifts.length + ' thing' + (day.gifts.length > 1 ? 's' : '') + ' inside.'}</div>
-                ${giftTags}
-                ${giftReveals}
-                ${openBtn}
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+    document.addEventListener('mousemove', function (e) {
+      const mx = (e.clientX / window.innerWidth  - 0.5);
+      const my = (e.clientY / window.innerHeight - 0.5);
+      roomEl.querySelectorAll('.gift-obj').forEach((obj, i) => {
+        const g = GIFTS[i];
+        const depth = g.size / 16;
+        const x = mx * depth * 14;
+        const y = my * depth * 7;
+        obj.style.transform = `translate(calc(-50% + ${x}px), calc(50% + ${y}px))`;
+      });
     });
 
-    // Show birthday banner if today is >= June 22
-    if (todayStr() >= '2026-06-22') {
-      document.getElementById('birthdayBanner').classList.add('visible');
-    }
-
     // ─────────────────────────────────────────────────────────────
-    // MODAL LOGIC
+    // MODAL
     // ─────────────────────────────────────────────────────────────
 
-    const modal = document.getElementById('modalBackdrop');
+    const modal       = document.getElementById('modal');
     const modalEyebrow = document.getElementById('modalEyebrow');
     const modalHeading = document.getElementById('modalHeading');
-    const modalPrompt = document.getElementById('modalPrompt');
-    const modalInput = document.getElementById('modalInput');
-    const modalError = document.getElementById('modalError');
-    const btnReveal = document.getElementById('btnReveal');
-    const btnClose = document.getElementById('btnClose');
-    const revealFlash = document.getElementById('revealFlash');
+    const modalPrompt  = document.getElementById('modalPrompt');
+    const modalInput   = document.getElementById('modalInput');
+    const modalError   = document.getElementById('modalError');
+    const modalInputWrap = document.getElementById('modalInputWrap');
+    const revealText   = document.getElementById('revealText');
+    const btnReveal    = document.getElementById('btnReveal');
+    const btnClose     = document.getElementById('btnClose');
+    const revealFlash  = document.getElementById('revealFlash');
 
-    let activeDay = null;
-    let activeGiftIndex = 0;
+    let activeIdx = null;
+    let revealed  = false;
 
-    function openModal(dayIndex) {
-      const day = DAYS[dayIndex];
-      const nextUnrevealedIndex = day.gifts.findIndex((_, gi) => !unlocked[`${day.date}-${gi}`]);
-      if (nextUnrevealedIndex === -1) return;
+    function openModal(idx) {
+      const g = GIFTS[idx];
+      activeIdx = idx;
+      revealed  = false;
 
-      activeDay = dayIndex;
-      activeGiftIndex = nextUnrevealedIndex;
-
-      const gift = day.gifts[nextUnrevealedIndex];
-      modalEyebrow.textContent = day.label;
-      modalHeading.textContent = day.roomName;
-      modalPrompt.textContent = gift.prompt;
+      modalEyebrow.textContent = `gift ${idx + 1} of ${GIFTS.length}`;
+      modalHeading.textContent = g.label;
+      modalPrompt.textContent  = g.prompt;
       modalInput.value = '';
       modalError.textContent = '';
       modalInput.classList.remove('error');
+      revealText.classList.remove('visible');
+      revealText.textContent = '';
+      modalInputWrap.style.display = '';
+      btnReveal.textContent = 'open';
 
       modal.classList.add('open');
       setTimeout(() => modalInput.focus(), 300);
@@ -953,131 +797,158 @@
 
     function closeModal() {
       modal.classList.remove('open');
-      activeDay = null;
+      activeIdx = null;
     }
 
     function attemptReveal() {
-      if (activeDay === null) return;
+      if (activeIdx === null) return;
+      if (revealed) { closeModal(); return; }
 
-      const day = DAYS[activeDay];
-      const gift = day.gifts[activeGiftIndex];
-      const typed = modalInput.value.trim().toLowerCase();
-      const expected = gift.phrase.trim().toLowerCase();
+      const g = GIFTS[activeIdx];
+      const typed    = modalInput.value.trim().toLowerCase();
+      const expected = g.phrase.trim().toLowerCase();
 
       if (typed !== expected) {
         modalInput.classList.add('error');
-        modalError.textContent = 'that\'s not it. listen closer.';
+        modalError.textContent = "that's not it. listen closer.";
         setTimeout(() => modalInput.classList.remove('error'), 500);
         return;
       }
 
-      // Correct phrase
-      modalError.textContent = '';
-      const key = `${day.date}-${activeGiftIndex}`;
-      unlocked[key] = true;
-      setUnlocked(unlocked);
+      // Correct
+      unlocked[g.id] = true;
+      save(unlocked);
+      revealed = true;
 
-      closeModal();
-
-      // Flash
       revealFlash.classList.remove('flash');
       void revealFlash.offsetWidth;
       revealFlash.classList.add('flash');
 
-      // Re-render corridor
-      corridor.innerHTML = '';
-      renderCorridor();
-    }
+      modalInputWrap.style.display = 'none';
+      revealText.textContent = g.note;
+      revealText.classList.add('visible');
+      btnReveal.textContent = 'close';
 
-    // Delegate open button clicks
-    corridor.addEventListener('click', function (e) {
-      const btn = e.target.closest('.door-btn');
-      if (!btn) return;
-      const dayIndex = parseInt(btn.dataset.day, 10);
-      openModal(dayIndex);
-    });
+      renderRoom();
+    }
 
     btnReveal.addEventListener('click', attemptReveal);
-
-    modalInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') attemptReveal();
-    });
-
+    modalInput.addEventListener('keydown', e => { if (e.key === 'Enter') attemptReveal(); });
     btnClose.addEventListener('click', closeModal);
-
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) closeModal();
-    });
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
     // ─────────────────────────────────────────────────────────────
-    // RE-RENDER HELPER (called after unlock)
+    // EMBERS
     // ─────────────────────────────────────────────────────────────
 
-    function renderCorridor() {
-      DAYS.forEach((day, di) => {
-        const status = dayStatus(day.date);
-        const isLocked = status === 'locked';
-        const isToday = status === 'today';
-        const isBirthday = !!day.isBirthday;
-
-        const allUnlocked = day.gifts.every((_, gi) => unlocked[`${day.date}-${gi}`]);
-
-        let frameClass = 'door-frame';
-        if (isLocked) frameClass += ' is-locked';
-        if (isToday && !isBirthday) frameClass += ' is-today';
-        if (isBirthday) frameClass += ' is-birthday';
-        if (!isLocked && allUnlocked) frameClass += ' is-unlocked';
-
-        const statusText = isLocked
-          ? 'sealed'
-          : isBirthday
-          ? 'her birthday'
-          : isToday
-          ? 'tonight'
-          : allUnlocked ? 'opened' : 'awaiting';
-
-        const giftTags = isLocked
-          ? ''
-          : `<div class="gift-tags">${day.gifts.map((g, gi) => {
-              const key = `${day.date}-${gi}`;
-              const done = !!unlocked[key];
-              return `<span class="gift-tag">${done ? g.title : '???'}</span>`;
-            }).join('')}</div>`;
-
-        const giftReveals = day.gifts.map((g, gi) =>
-          renderGiftReveal(g, `${day.date}-${gi}`)
-        ).join('');
-
-        const openBtn = (!isLocked && !allUnlocked)
-          ? `<button class="door-btn" data-day="${di}">open the door →</button>`
-          : '';
-
-        const lockIcon = isLocked ? '<div class="door-lock">&#9775;</div>' : '';
-
-        corridor.innerHTML += `
-          <div class="door-card" style="animation:none;opacity:1;transform:none" data-day="${di}">
-            <div class="${frameClass}">
-              <div class="door-inner">
-                <div class="door-date">
-                  <span class="door-month">june</span>
-                  <span class="door-day-num">${day.dayNum}</span>
-                  <span class="door-label">${statusText}</span>
-                  ${lockIcon}
-                </div>
-                <div class="door-content">
-                  <div class="door-status-line">${isBirthday ? '— her birthday —' : `room ${di + 1} of 6`}</div>
-                  <div class="door-title">${isLocked ? '[ sealed ]' : day.roomName}</div>
-                  <div class="door-excerpt">${isLocked ? 'this room opens on ' + day.label + '.' : day.gifts.length + ' thing' + (day.gifts.length > 1 ? 's' : '') + ' inside.'}</div>
-                  ${giftTags}
-                  ${giftReveals}
-                  ${openBtn}
-                </div>
-              </div>
-            </div>
-          </div>
+    (function () {
+      const c = document.getElementById('embers');
+      function spawn() {
+        const e = document.createElement('div');
+        e.className = 'ember';
+        const drift = (Math.random() - 0.5) * 130;
+        e.style.cssText = `
+          left:${Math.random()*100}%;
+          --drift:${drift}px;
+          width:${Math.random()*2+1}px;
+          height:${Math.random()*2+1}px;
+          animation-duration:${7+Math.random()*10}s;
+          animation-delay:${Math.random()*6}s;
         `;
-      });
-    }
+        c.appendChild(e);
+        setTimeout(() => e.remove(), 20000);
+      }
+      for (let i = 0; i < 20; i++) spawn();
+      setInterval(spawn, 1100);
+    })();
+
+    // ─────────────────────────────────────────────────────────────
+    // BATS
+    // ─────────────────────────────────────────────────────────────
+
+    (function () {
+      const BAT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -7 24 12">
+        <path d="M0,-1 C-0.5,-4 -4,-5 -7,-3 C-9,-2 -9,0 -7,0.5 L-4,0 C-2,0.8 -0.5,1.5 0,1.5 C0.5,1.5 2,0.8 4,0 L7,0.5 C9,0 9,-2 7,-3 C4,-5 0.5,-4 0,-1 Z M-0.3,1.5 C-0.4,3 -0.2,4 0,4 C0.2,4 0.4,3 0.3,1.5 Z" fill="rgba(90,60,130,0.75)"/>
+      </svg>`;
+
+      function spawnBat() {
+        const rev  = Math.random() > 0.5;
+        const size = 18 + Math.random() * 22;
+        const top  = 8  + Math.random() * 48;
+        const dur  = 9  + Math.random() * 9;
+        const op   = (0.28 + Math.random() * 0.28).toFixed(2);
+
+        const el = document.createElement('div');
+        el.className = 'bat';
+        el.innerHTML = BAT;
+        el.style.cssText = `
+          width:${size}px; height:${size * 0.65}px;
+          top:${top}%; ${rev ? 'right:-60px' : 'left:-60px'};
+          --bat-op:${op};
+          animation: ${rev ? 'bat-fly-rev' : 'bat-fly'} ${dur}s ease-in-out forwards;
+        `;
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+
+      setTimeout(spawnBat, 1200);
+      setTimeout(spawnBat, 3800);
+      setInterval(spawnBat, 4500 + Math.random() * 3000);
+    })();
+
+    // ─────────────────────────────────────────────────────────────
+    // DOGS
+    // ─────────────────────────────────────────────────────────────
+
+    (function () {
+      const DOG_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 26" fill="rgba(80,55,110,0.65)">
+        <!-- body -->
+        <ellipse cx="20" cy="17" rx="12" ry="6"/>
+        <!-- neck -->
+        <rect x="29" y="11" width="5" height="7" rx="2"/>
+        <!-- head -->
+        <ellipse cx="36" cy="10" rx="5" ry="4.5"/>
+        <!-- ear -->
+        <ellipse cx="33" cy="6" rx="2" ry="3.5" transform="rotate(-20 33 6)"/>
+        <!-- snout -->
+        <ellipse cx="41" cy="12" rx="3.5" ry="2.5"/>
+        <!-- nose dot -->
+        <circle cx="43.5" cy="11.5" r="0.8" fill="rgba(80,55,110,0.9)"/>
+        <!-- tail -->
+        <path d="M 8 14 C 4 9 3 5 6 3" stroke="rgba(80,55,110,0.65)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- front legs -->
+        <rect x="28" y="22" width="3" height="5" rx="1.5" class="leg"/>
+        <rect x="23" y="22" width="3" height="5" rx="1.5" class="leg"/>
+        <!-- back legs -->
+        <rect x="14" y="22" width="3" height="5" rx="1.5" class="leg"/>
+        <rect x="9"  y="22" width="3" height="5" rx="1.5" class="leg"/>
+      </svg>`;
+
+      function spawnDog() {
+        const rev  = Math.random() > 0.5;
+        const size = 40 + Math.random() * 30;
+        const dur  = 7  + Math.random() * 6;
+        const op   = (0.35 + Math.random() * 0.25).toFixed(2);
+        const bot  = 1  + Math.random() * 4;
+
+        const el = document.createElement('div');
+        el.className = 'dog';
+        el.innerHTML = DOG_SVG;
+        el.style.cssText = `
+          width:${size}px;
+          bottom:${bot}%;
+          ${rev ? 'right:-80px' : 'left:-80px'};
+          --dog-op:${op};
+          animation: ${rev ? 'dog-run-rev' : 'dog-run'} ${dur}s linear forwards;
+        `;
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+
+      setTimeout(spawnDog, 2500);
+      setTimeout(spawnDog, 7000);
+      setInterval(spawnDog, 10000 + Math.random() * 8000);
+    })();
   </script>
 </body>
 </html>
