@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noimageindex, noarchive">
+  <!-- FILL IN: confirm the Tamil spelling. payagalam was பயகலாம், so this is the parallel form. -->
+  <title>பயகிட்டோம்</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Caveat:wght@400;500&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:     #0a0a0a;
+      --cream:  #e8e0d4;
+      --bright: #f5ebe0;
+      --dim:    rgba(232, 224, 212, 0.55);
+      --warm:   #c8922a;
+      --cool:   #6b8ba8;
+    }
+
+    html, body { width: 100%; min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      user-select: none;
+      opacity: 0;
+      animation: page-in 1.6s ease 0.2s forwards;
+    }
+
+    @keyframes page-in { to { opacity: 1; } }
+
+    /* ── PANES ──────────────────────────────────────────────────── */
+
+    .pane {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      z-index: 0;
+      pointer-events: none;
+      transition: opacity 2.4s ease;
+    }
+
+    .pane-austin {
+      left: 0;
+      background:
+        radial-gradient(ellipse 90% 60% at 30% 100%, rgba(200, 146, 42, 0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 20% 0%,   rgba(200, 146, 42, 0.05) 0%, transparent 65%);
+    }
+
+    .pane-portland {
+      right: 0;
+      background:
+        radial-gradient(ellipse 90% 60% at 70% 100%, rgba(107, 139, 168, 0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 80% 0%,   rgba(107, 139, 168, 0.06) 0%, transparent 65%);
+    }
+
+    body.merged .pane { opacity: 0; }
+
+    .merged-wash {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 2.4s ease;
+      background:
+        radial-gradient(ellipse 60% 45% at 22% 100%, rgba(200, 146, 42, 0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 45% at 78% 100%, rgba(107, 139, 168, 0.12) 0%, transparent 70%);
+    }
+
+    body.merged .merged-wash { opacity: 1; }
+
+    /* ── SEAM ───────────────────────────────────────────────────── */
+
+    .seam {
+      position: fixed;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(232, 224, 212, 0.18) 25%,
+        rgba(232, 224, 212, 0.26) 50%,
+        rgba(232, 224, 212, 0.18) 75%,
+        transparent 100%);
+      transition: opacity 1.8s ease, transform 1.8s ease;
+      transform-origin: center;
+    }
+
+    body.merged .seam { opacity: 0; transform: scaleY(0.2); }
+
+    /* ── HORIZON ────────────────────────────────────────────────── */
+
+    .scape {
+      position: fixed;
+      bottom: 74px;
+      width: 50%;
+      height: 84px;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .scape-austin   { left: 0; }
+    .scape-portland { right: 0; opacity: 0.09; }
+
+    /* ── RAIN ───────────────────────────────────────────────────── */
+
+    .rain {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 50%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      transition: left 2.4s ease, width 2.4s ease;
+    }
+
+    body.merged .rain { left: 0; width: 100%; }
+
+    .drop {
+      position: absolute;
+      top: -12vh;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(180, 205, 225, 0.35));
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0)     translateX(0);   opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateY(125vh) translateX(14px); opacity: 0; }
+    }
+
+    /* ── BLUEBONNET (the plant from payagalam) ──────────────────── */
+
+    .bluebonnet {
+      position: fixed;
+      bottom: 68px;
+      left: 11%;
+      width: 66px;
+      height: 196px;
+      pointer-events: none;
+      z-index: 3;
+      transform-origin: bottom center;
+      transition: left 3s cubic-bezier(0.65, 0, 0.35, 1),
+                  transform 3s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    body.merged .bluebonnet {
+      left: 78%;
+      transform: scale(1.18);
+    }
+
+    .bluebonnet .stem {
+      stroke-dasharray: 240;
+      stroke-dashoffset: 240;
+      animation: draw-stem 2.6s ease-out 1.4s forwards;
+    }
+
+    @keyframes draw-stem { to { stroke-dashoffset: 0; } }
+
+    .bluebonnet .leaf {
+      opacity: 0;
+      transform-origin: 40px 200px;
+      animation: bloom-leaf 0.8s ease-out forwards;
+    }
+
+    .bluebonnet .leaf-1 { animation-delay: 2.8s; }
+    .bluebonnet .leaf-2 { animation-delay: 3.2s; }
+
+    .bluebonnet .bud {
+      opacity: 0;
+      animation: bloom-bud 0.6s ease-out forwards;
+    }
+
+    .bluebonnet .bud-1 { animation-delay: 3.5s; }
+    .bluebonnet .bud-2 { animation-delay: 3.65s; }
+    .bluebonnet .bud-3 { animation-delay: 3.8s; }
+    .bluebonnet .bud-4 { animation-delay: 3.95s; }
+    .bluebonnet .bud-5 { animation-delay: 4.1s; }
+    .bluebonnet .bud-6 { animation-delay: 4.25s; }
+    .bluebonnet .bud-7 { animation-delay: 4.4s; }
+
+    /* buds that only open after the move */
+    .bluebonnet .bud-new {
+      opacity: 0;
+      transition: opacity 1.2s ease 1.8s, transform 1.2s ease 1.8s;
+      transform: scale(0.2);
+      transform-origin: center;
+    }
+
+    body.merged .bluebonnet .bud-new { opacity: 0.85; transform: scale(1); }
+
+    @keyframes bloom-leaf {
+      from { opacity: 0; transform: scale(0.4); }
+      to   { opacity: 0.55; transform: scale(1); }
+    }
+
+    @keyframes bloom-bud {
+      from { opacity: 0; transform: scale(0.2); }
+      to   { opacity: 0.7; transform: scale(1); }
+    }
+
+    .plant-note {
+      position: fixed;
+      bottom: 40px;
+      left: 78%;
+      transform: translateX(-50%);
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: rgba(232, 224, 212, 0.5);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 3;
+      transition: opacity 1.4s ease 3.2s;
+    }
+
+    body.merged .plant-note { opacity: 1; }
+
+    /* ── CONTENT ────────────────────────────────────────────────── */
+
+    .container {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 760px;
+      margin: auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .greeting {
+      font-size: 0.85rem;
+      letter-spacing: 0.32em;
+      text-transform: lowercase;
+      color: var(--dim);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .greeting.visible { opacity: 1; }
+
+    .line {
+      font-size: 1.35rem;
+      font-weight: 300;
+      line-height: 1.75;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.35rem;
+      min-height: 2.4rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .line.visible { opacity: 1; }
+
+    .line.final {
+      font-size: 1.9rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-top: 1rem;
+      color: var(--bright);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: var(--cream);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.9s ease-in-out infinite;
+    }
+
+    .final .cursor { height: 1.3em; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* the opening verse steps aside once the gap closes */
+    .opening { transition: opacity 1.4s ease, max-height 1.4s ease; max-height: 300px; overflow: hidden; }
+    body.merged .opening { opacity: 0; max-height: 0; }
+
+    /* ── CLOCKS ─────────────────────────────────────────────────── */
+
+    .clocks {
+      position: relative;
+      height: 168px;
+      margin: 2.2rem 0 0.4rem;
+      transition: margin-top 1.4s ease;
+    }
+
+    body.merged .clocks { margin-top: 0.8rem; }
+
+    .clock {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      transition: left 2.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 1.2s ease;
+      opacity: 0;
+    }
+
+    .clocks.visible .clock { opacity: 1; }
+
+    .clock-austin   { left: 26%; }
+    .clock-portland { left: 74%; }
+
+    body.merged .clock-austin   { left: 50%; opacity: 0; }
+    body.merged .clock-portland { left: 50%; }
+
+    /* the clocks only slide together once the counter has reached zero */
+    body.merged .clock {
+      transition: left 2.2s cubic-bezier(0.65, 0, 0.35, 1) 3.2s,
+                  opacity 1.4s ease 3.2s;
+    }
+
+    .clock-face {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      border: 1px solid rgba(232, 224, 212, 0.22);
+      position: relative;
+      margin: 0 auto;
+      background: rgba(232, 224, 212, 0.012);
+    }
+
+    .clock-austin .clock-face   { box-shadow: 0 0 40px rgba(200, 146, 42, 0.07); }
+    .clock-portland .clock-face { box-shadow: 0 0 40px rgba(107, 139, 168, 0.09); }
+
+    .tick {
+      position: absolute;
+      left: 50%;
+      top: 5px;
+      width: 1px;
+      height: 5px;
+      background: rgba(232, 224, 212, 0.3);
+      transform-origin: 50% 51px;
+    }
+
+    .tick.major { height: 9px; background: rgba(232, 224, 212, 0.5); }
+
+    .hand {
+      position: absolute;
+      left: 50%;
+      bottom: 50%;
+      background: var(--cream);
+      transform-origin: 50% 100%;
+      border-radius: 1px;
+    }
+
+    .hand.hour   { width: 2.5px; height: 30px; margin-left: -1.25px; }
+    .hand.minute { width: 1.5px; height: 44px; margin-left: -0.75px; opacity: 0.85; }
+
+    .hand.second {
+      width: 1px;
+      height: 47px;
+      margin-left: -0.5px;
+      background: rgba(200, 146, 42, 0.65);
+    }
+
+    .clock-portland .hand.second { background: rgba(107, 139, 168, 0.8); }
+
+    .pivot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 5px;
+      height: 5px;
+      margin: -2.5px 0 0 -2.5px;
+      border-radius: 50%;
+      background: var(--cream);
+    }
+
+    .clock-label {
+      margin-top: 0.9rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(232, 224, 212, 0.42);
+      transition: opacity 0.9s ease;
+    }
+
+    .clock-digits {
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.14em;
+      color: rgba(232, 224, 212, 0.3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .gap {
+      position: absolute;
+      left: 50%;
+      top: 44px;
+      transform: translateX(-50%);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      z-index: 6;
+    }
+
+    .gap.visible { opacity: 1; }
+
+    .gap-value {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      color: rgba(232, 224, 212, 0.62);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .gap-caption {
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(232, 224, 212, 0.26);
+      margin-top: 0.2rem;
+    }
+
+    /* ── PRINTS ─────────────────────────────────────────────────── */
+
+    .prints {
+      position: relative;
+      height: 178px;
+      margin-top: 0.6rem;
+    }
+
+    .print-wrap {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: left 2.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 1.2s ease;
+    }
+
+    .prints.visible .print-wrap { opacity: 1; }
+
+    .print-austin   { left: 26%; z-index: 2; }
+    .print-portland { left: 74%; z-index: 1; }
+
+    body.merged .print-austin   { left: 38%; }
+    body.merged .print-portland { left: 62%; }
+
+    body.merged .print-wrap {
+      transition: left 2.2s cubic-bezier(0.65, 0, 0.35, 1) 3.2s,
+                  opacity 1.2s ease;
+    }
+
+    .print {
+      width: 156px;
+      background: #f5ebe0;
+      padding: 9px 9px 0 9px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.4);
+      position: relative;
+      transition: transform 0.6s ease;
+    }
+
+    .print-austin   .print { transform: rotate(-3.2deg); }
+    .print-portland .print { transform: rotate(2.4deg); }
+
+    .print-austin   .print:hover { transform: rotate(-1.2deg) translateY(-4px); }
+    .print-portland .print:hover { transform: rotate(0.8deg) translateY(-4px); }
+
+    .tape {
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      width: 56px;
+      height: 20px;
+      margin-left: -28px;
+      background: rgba(232, 224, 212, 0.13);
+      border-left: 1px solid rgba(232, 224, 212, 0.08);
+      border-right: 1px solid rgba(232, 224, 212, 0.08);
+      transform: rotate(-2deg);
+    }
+
+    .print-photo {
+      width: 100%;
+      height: 112px;
+      background-color: #121212;
+      background-size: cover;
+      background-position: center 45%;
+      position: relative;
+    }
+
+    /* FILL IN: drop austin.jpg and portland.jpg into this folder */
+    .print-austin   .print-photo { background-image: url('austin.jpg'); }
+    .print-portland .print-photo { background-image: url('portland.jpg'); }
+
+    .print-caption {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: #444;
+      text-align: center;
+      padding: 8px 0 10px;
+    }
+
+    /* ── BUTTON ─────────────────────────────────────────────────── */
+
+    .action {
+      margin-top: 1.4rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.9s ease, transform 0.9s ease, max-height 1s ease;
+      max-height: 120px;
+      overflow: hidden;
+    }
+
+    .action.visible { opacity: 1; transform: translateY(0); }
+
+    body.merged .action { opacity: 0; max-height: 0; margin-top: 0; pointer-events: none; }
+
+    .gap-btn {
+      display: inline-block;
+      padding: 0.75rem 2.6rem;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: lowercase;
+      color: var(--cream);
+      background: transparent;
+      border: 1px solid rgba(232, 224, 212, 0.3);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gap-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(232, 224, 212, 0.08);
+      transition: left 0.4s ease;
+    }
+
+    .gap-btn:hover {
+      border-color: rgba(232, 224, 212, 0.6);
+      box-shadow: 0 0 30px rgba(232, 224, 212, 0.06);
+    }
+
+    .gap-btn:hover::before { left: 0; }
+
+    /* ── FACETIME FLASH ─────────────────────────────────────────── */
+
+    .ft-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: #050505;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    .ft-flash.visible { opacity: 1; }
+
+    /* she was lying down for every one of these, so the frame is a phone */
+    .ft-frame {
+      height: min(68vh, 600px);
+      max-width: 86vw;
+      aspect-ratio: 884 / 1920;
+      background-size: cover;
+      background-position: center;
+      background-color: #0d0d0d;
+      border-radius: 5px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85);
+    }
+
+    .ft-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 80% 80% at 50% 50%,
+        transparent 40%, rgba(5, 5, 5, 0.6) 80%, rgba(5, 5, 5, 0.95) 100%);
+    }
+
+    .ft-caption {
+      position: absolute;
+      bottom: 11%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      letter-spacing: 0.04em;
+      color: rgba(232, 224, 212, 0.5);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .ft-caption.visible { opacity: 1; }
+
+    /* ── CLOSING ────────────────────────────────────────────────── */
+
+    .closing {
+      margin-top: 1.2rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 1.2s ease;
+    }
+
+    body.merged .closing { max-height: 760px; }
+
+    .name-flipper {
+      height: 3rem;
+      overflow: hidden;
+      position: relative;
+      margin-top: 1.6rem;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .name-flipper.visible { opacity: 1; }
+
+    .name-track { transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1); }
+
+    .name-item {
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--bright);
+      letter-spacing: 0.03em;
+      transition: text-shadow 1.2s ease;
+    }
+
+    .name-item.landed { text-shadow: 0 0 46px rgba(232, 224, 212, 0.35); }
+
+    .signoff {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      font-style: italic;
+      letter-spacing: 0.03em;
+      color: rgba(232, 224, 212, 0.6);
+      line-height: 1.8;
+      opacity: 0;
+      transition: opacity 1.4s ease;
+    }
+
+    .signoff.visible { opacity: 1; }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+
+    @media (max-width: 640px) {
+      body { overflow-y: auto; align-items: flex-start; }
+      .container { padding: 3rem 1.1rem 4rem; }
+      .greeting { font-size: 0.72rem; margin-bottom: 1.3rem; }
+      .line { font-size: 1.1rem; }
+      .line.final { font-size: 1.45rem; }
+
+      .clocks { height: 132px; margin-top: 1.6rem; }
+      .clock-face { width: 82px; height: 82px; }
+      .tick { transform-origin: 50% 36px; height: 4px; }
+      .tick.major { height: 7px; }
+      .hand.hour   { height: 22px; }
+      .hand.minute { height: 32px; }
+      .hand.second { height: 34px; }
+      .clock-austin   { left: 24%; }
+      .clock-portland { left: 76%; }
+      .clock-label { font-size: 0.55rem; margin-top: 0.6rem; }
+      .clock-digits { font-size: 0.78rem; }
+      .gap { top: 30px; }
+      .gap-value { font-size: 1.15rem; }
+
+      .prints { height: 150px; }
+      .print { width: 118px; padding: 7px 7px 0 7px; }
+      .print-photo { height: 86px; }
+      .print-caption { font-size: 0.9rem; padding: 6px 0 8px; }
+      .print-austin   { left: 27%; }
+      .print-portland { left: 73%; }
+      body.merged .print-austin   { left: 38%; }
+      body.merged .print-portland { left: 62%; }
+
+      .name-item { font-size: 1.6rem; height: 2.5rem; }
+      .name-flipper { height: 2.5rem; }
+      .signoff { font-size: 0.92rem; }
+
+      .bluebonnet { width: 46px; height: 138px; left: 7%; bottom: 84px; }
+      .plant-note { font-size: 0.9rem; bottom: 56px; }
+      .scape { height: 58px; bottom: 88px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body { animation: none; opacity: 1; }
+      .bluebonnet * { animation: none !important; opacity: 0.6 !important; stroke-dashoffset: 0 !important; }
+      .drop { animation: none; opacity: 0; }
+      .hand.second { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pane pane-austin"></div>
+  <div class="pane pane-portland"></div>
+  <div class="merged-wash"></div>
+  <div class="seam"></div>
+
+  <!-- Austin, same skyline as payagalam -->
+  <svg class="scape scape-austin" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="60"   y="58"  width="48" height="62" fill="#e8e0d4"/>
+    <rect x="130"  y="48"  width="36" height="72" fill="#e8e0d4"/>
+    <rect x="190"  y="40"  width="22" height="80" fill="#e8e0d4"/>
+    <rect x="186"  y="32"  width="30" height="8"  fill="#e8e0d4"/>
+    <rect x="198"  y="20"  width="6"  height="14" fill="#e8e0d4"/>
+    <rect x="270"  y="62"  width="60" height="58" fill="#e8e0d4"/>
+    <rect x="350"  y="52"  width="44" height="68" fill="#e8e0d4"/>
+    <path d="M470,72 Q510,28 550,72 L545,120 L475,120 Z" fill="#e8e0d4"/>
+    <rect x="505"  y="14"  width="10" height="20" fill="#e8e0d4"/>
+    <circle cx="510" cy="12" r="3" fill="#e8e0d4"/>
+    <rect x="610"  y="60"  width="50" height="60" fill="#e8e0d4"/>
+    <rect x="680"  y="50"  width="40" height="70" fill="#e8e0d4"/>
+    <path d="M770,40 L820,40 L824,120 L766,120 Z" fill="#e8e0d4"/>
+    <polygon points="770,40 782,18 794,40" fill="#e8e0d4"/>
+    <polygon points="794,40 806,12 818,40" fill="#e8e0d4"/>
+    <polygon points="818,40 824,28 826,40" fill="#e8e0d4"/>
+    <rect x="850"  y="58"  width="46" height="62" fill="#e8e0d4"/>
+    <rect x="910"  y="46"  width="34" height="74" fill="#e8e0d4"/>
+    <rect x="960"  y="64"  width="54" height="56" fill="#e8e0d4"/>
+    <rect x="1030" y="52"  width="40" height="68" fill="#e8e0d4"/>
+    <rect x="1090" y="60"  width="60" height="60" fill="#e8e0d4"/>
+  </svg>
+
+  <!-- Portland: firs, St Johns towers, Mt Hood -->
+  <svg class="scape scape-portland" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <polygon points="30,120 60,72 90,120"   fill="#e8e0d4"/>
+    <polygon points="80,120 112,60 144,120" fill="#e8e0d4"/>
+    <polygon points="138,120 164,80 190,120" fill="#e8e0d4"/>
+
+    <path d="M250,120 L250,34 L268,34 L268,120 Z" fill="#e8e0d4"/>
+    <polygon points="250,34 259,10 268,34" fill="#e8e0d4"/>
+    <path d="M250,62 Q259,44 268,62 L268,84 L250,84 Z" fill="#0a0a0a"/>
+    <path d="M430,120 L430,34 L448,34 L448,120 Z" fill="#e8e0d4"/>
+    <polygon points="430,34 439,10 448,34" fill="#e8e0d4"/>
+    <path d="M430,62 Q439,44 448,62 L448,84 L430,84 Z" fill="#0a0a0a"/>
+    <path d="M160,96 Q259,44 359,84 Q439,110 520,96" stroke="#e8e0d4" stroke-width="2" fill="none"/>
+    <path d="M259,30 Q349,66 439,30" stroke="#e8e0d4" stroke-width="1.6" fill="none"/>
+    <rect x="150" y="94" width="400" height="4" fill="#e8e0d4"/>
+
+    <polygon points="640,120 700,66 760,120" fill="#e8e0d4"/>
+    <polygon points="690,120 740,58 790,120" fill="#e8e0d4"/>
+
+    <polygon points="840,120 1010,14 1180,120" fill="#e8e0d4"/>
+    <polygon points="962,44 1010,14 1058,44 1036,52 1016,38 994,54 976,42" fill="#0a0a0a" opacity="0.55"/>
+  </svg>
+
+  <div class="rain" id="rain" aria-hidden="true"></div>
+
+  <!-- the plant from payagalam, moving house -->
+  <svg class="bluebonnet" viewBox="0 0 80 220" aria-hidden="true">
+    <path class="stem" d="M40,220 C42,180 38,150 40,120 C42,95 38,70 40,40"
+          stroke="#9aa68f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+
+    <ellipse class="leaf leaf-1" cx="28" cy="150" rx="14" ry="3.5"
+             fill="#7a8a6f" transform="rotate(-22 28 150)"/>
+    <ellipse class="leaf leaf-2" cx="52" cy="128" rx="13" ry="3.2"
+             fill="#7a8a6f" transform="rotate(24 52 128)"/>
+
+    <circle class="bud bud-1" cx="36" cy="98" r="3.6" fill="#5d6da8"/>
+    <circle class="bud bud-2" cx="44" cy="92" r="3.6" fill="#5d6da8"/>
+    <circle class="bud bud-3" cx="36" cy="84" r="3.6" fill="#6b7cb8"/>
+    <circle class="bud bud-4" cx="44" cy="78" r="3.6" fill="#6b7cb8"/>
+    <circle class="bud bud-5" cx="36" cy="70" r="3.4" fill="#7d8dc4"/>
+    <circle class="bud bud-6" cx="44" cy="64" r="3.4" fill="#7d8dc4"/>
+    <circle class="bud bud-7" cx="40" cy="56" r="3.2" fill="#9aa6d2"/>
+
+    <circle class="bud-new" cx="38" cy="48" r="2.9" fill="#b4bde0"/>
+    <circle class="bud-new" cx="43" cy="42" r="2.7" fill="#e8e0d4"/>
+    <circle class="bud-new" cx="39" cy="36" r="2.4" fill="#f5ebe0"/>
+  </svg>
+
+  <div class="plant-note">turns out it travels.</div>
+
+  <!-- every call we ever had to have through a screen -->
+  <div class="ft-flash" id="ftFlash" aria-hidden="true">
+    <div class="ft-frame" id="ftFrame"></div>
+    <div class="ft-vignette"></div>
+    <!-- FILL IN: caption shown over the montage -->
+    <div class="ft-caption" id="ftCaption">five months of this.</div>
+  </div>
+
+  <div class="container">
+    <div class="greeting" id="greeting">to sandhya portland,</div>
+
+    <!-- FILL IN: the opening verse. keep it to four short lines. -->
+    <div class="opening">
+      <div class="line" id="line-0"></div>
+      <div class="line" id="line-1"></div>
+      <div class="line" id="line-2"></div>
+      <div class="line final" id="line-3"></div>
+    </div>
+
+    <div class="clocks" id="clocks">
+      <div class="clock clock-austin">
+        <div class="clock-face" id="face-austin">
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="pivot"></div>
+        </div>
+        <div class="clock-label" id="label-austin">austin</div>
+        <div class="clock-digits" id="digits-austin"></div>
+      </div>
+
+      <div class="clock clock-portland">
+        <div class="clock-face" id="face-portland">
+          <div class="hand hour"></div>
+          <div class="hand minute"></div>
+          <div class="hand second"></div>
+          <div class="pivot"></div>
+        </div>
+        <div class="clock-label" id="label-portland">portland</div>
+        <div class="clock-digits" id="digits-portland"></div>
+      </div>
+
+      <div class="gap" id="gap">
+        <div class="gap-value" id="gapValue">2 hours</div>
+        <div class="gap-caption" id="gapCaption">the tax</div>
+      </div>
+    </div>
+
+    <div class="prints" id="prints">
+      <div class="print-wrap print-austin">
+        <div class="print">
+          <div class="tape"></div>
+          <div class="print-photo"></div>
+          <!-- FILL IN: caption -->
+          <div class="print-caption">my side.</div>
+        </div>
+      </div>
+      <div class="print-wrap print-portland">
+        <div class="print">
+          <div class="tape"></div>
+          <div class="print-photo"></div>
+          <!-- FILL IN: caption -->
+          <div class="print-caption">your side.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action" id="action">
+      <button class="gap-btn" id="gapBtn">close the gap</button>
+    </div>
+
+    <div class="closing">
+      <div class="line" id="post-0"></div>
+      <div class="line" id="post-1"></div>
+      <div class="line final" id="post-2"></div>
+      <div class="line final" id="post-3"></div>
+
+      <div class="name-flipper" id="flipper">
+        <div class="name-track" id="track">
+          <div class="name-item">Mathangi</div>
+          <div class="name-item">Rohini</div>
+          <div class="name-item">Nandita</div>
+          <div class="name-item">Kanakavalli</div>
+          <div class="name-item">Sandhya</div>
+          <div class="name-item">Sandhya Portland</div>
+          <div class="name-item">Vig + San Portland</div>
+        </div>
+      </div>
+
+      <!-- FILL IN: sign-off -->
+      <div class="signoff" id="signoff">
+        cheers to a lifetime together,<br>
+        and to always figuring it out.<br><br>
+        from your vadakkan morapaiyyan.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const AUSTIN_TZ   = 'America/Chicago';
+    const PORTLAND_TZ = 'America/Los_Angeles';
+
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+
+    // ─────────────────────────────────────────────────────────────
+    // COPY — FILL IN
+    // ─────────────────────────────────────────────────────────────
+
+    const OPENING = [
+      { id: 'line-0', text: 'for five months, everything we did had a two hour tax on it.', pre: 900,  hold: 350 },
+      { id: 'line-1', text: 'every goodnight was early. every good morning was late.',     pre: 700,  hold: 350 },
+      { id: 'line-2', text: 'we paid it anyway.',                                          pre: 700,  hold: 400 },
+      { id: 'line-3', text: 'payagitom.',                                                  pre: 900,  hold: 0   },
+    ];
+
+    const CHAR_SPEED = 48;
+
+    // ─────────────────────────────────────────────────────────────
+    // TYPEWRITER
+    // ─────────────────────────────────────────────────────────────
+
+    function typeText(el, text) {
+      return new Promise(resolve => {
+        el.classList.add('visible');
+        let i = 0;
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+
+        function tick() {
+          el.textContent = text.slice(0, i);
+          el.appendChild(cursor);
+          if (i < text.length) {
+            i++;
+            setTimeout(tick, CHAR_SPEED);
+          } else {
+            resolve();
+          }
+        }
+
+        tick();
+      });
+    }
+
+    function removeCursor(el) {
+      const c = el.querySelector('.cursor');
+      if (c) c.remove();
+    }
+
+    async function typeSequence(lines) {
+      for (let i = 0; i < lines.length; i++) {
+        const { id, text, pre, hold } = lines[i];
+        const el = document.getElementById(id);
+        await wait(pre);
+        await typeText(el, text);
+        if (i < lines.length - 1) {
+          await wait(hold);
+          removeCursor(el);
+        }
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // CLOCKS
+    // ─────────────────────────────────────────────────────────────
+
+    function zoneMinutes(tz, date) {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit',
+      }).formatToParts(date);
+
+      const get = t => parseInt(parts.find(p => p.type === t).value, 10);
+      const h = get('hour') % 24;
+      return h * 3600 + get('minute') * 60 + get('second');
+    }
+
+    function digitString(totalSeconds) {
+      const h24 = Math.floor(totalSeconds / 3600) % 24;
+      const m   = Math.floor(totalSeconds / 60) % 60;
+      const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+      return `${h12}:${String(m).padStart(2, '0')} ${h24 < 12 ? 'am' : 'pm'}`;
+    }
+
+    function buildTicks(face) {
+      for (let i = 0; i < 12; i++) {
+        const t = document.createElement('div');
+        t.className = 'tick' + (i % 3 === 0 ? ' major' : '');
+        t.style.transform = `rotate(${i * 30}deg)`;
+        face.appendChild(t);
+      }
+    }
+
+    const faceAustin   = document.getElementById('face-austin');
+    const facePortland = document.getElementById('face-portland');
+    buildTicks(faceAustin);
+    buildTicks(facePortland);
+
+    function paintClock(face, digitsEl, totalSeconds) {
+      const h = face.querySelector('.hand.hour');
+      const m = face.querySelector('.hand.minute');
+      const s = face.querySelector('.hand.second');
+
+      h.style.transform = `rotate(${(totalSeconds / 43200) * 360}deg)`;
+      m.style.transform = `rotate(${(totalSeconds % 3600) / 3600 * 360}deg)`;
+      s.style.transform = `rotate(${(totalSeconds % 60) / 60 * 360}deg)`;
+
+      if (digitsEl) digitsEl.textContent = digitString(totalSeconds);
+    }
+
+    const digitsAustin   = document.getElementById('digits-austin');
+    const digitsPortland = document.getElementById('digits-portland');
+
+    let merged = false;
+    let windProgress = 0; // 0 = still two hours apart, 1 = synced
+    let lastGapText = '';
+
+    const gapValueEl = document.getElementById('gapValue');
+
+    function paintFrame() {
+      const now = new Date();
+      const pdx = zoneMinutes(PORTLAND_TZ, now);
+      const aus = zoneMinutes(AUSTIN_TZ, now);
+
+      // how far ahead austin is, in seconds, normalized across midnight
+      let diff = aus - pdx;
+      if (diff < -43200) diff += 86400;
+      if (diff >  43200) diff -= 86400;
+
+      const austinShown = (aus - diff * windProgress + 86400) % 86400;
+
+      paintClock(faceAustin, digitsAustin, austinShown);
+      paintClock(facePortland, digitsPortland, pdx);
+
+      // the counter comes down in step with the hands, not ahead of them
+      const gapSeconds = Math.round(diff * (1 - windProgress));
+      const hrs  = Math.floor(gapSeconds / 3600);
+      const mins = Math.round((gapSeconds % 3600) / 60);
+      const gapText = gapSeconds <= 30
+        ? '0 hours'
+        : (mins === 0 ? `${hrs} hours` : `${hrs}h ${mins}m`);
+
+      if (gapText !== lastGapText) {
+        gapValueEl.textContent = gapText;
+        lastGapText = gapText;
+      }
+    }
+
+    function runClocks() {
+      (function loop() {
+        paintFrame();
+        requestAnimationFrame(loop);
+      })();
+
+      // rAF is throttled on hidden tabs, so keep a slower backstop painting
+      setInterval(paintFrame, 250);
+    }
+
+    // austin winds itself backward until it is standing in her time.
+    // the timer is a backstop so a backgrounded tab still finishes the story.
+    function windBack(duration) {
+      return new Promise(resolve => {
+        const start = performance.now();
+        let settled = false;
+
+        function finish() {
+          if (settled) return;
+          settled = true;
+          windProgress = 1;
+          resolve();
+        }
+
+        function step(now) {
+          if (settled) return;
+          const p = Math.min((now - start) / duration, 1);
+          windProgress = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+          if (p < 1) requestAnimationFrame(step);
+          else finish();
+        }
+
+        requestAnimationFrame(step);
+        setTimeout(finish, duration + 500);
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // RAIN
+    // ─────────────────────────────────────────────────────────────
+
+    (function () {
+      const c = document.getElementById('rain');
+      for (let i = 0; i < 55; i++) {
+        const d = document.createElement('div');
+        d.className = 'drop';
+        d.style.cssText = `
+          left:${Math.random() * 100}%;
+          height:${20 + Math.random() * 46}px;
+          animation-duration:${0.9 + Math.random() * 1.3}s;
+          animation-delay:${Math.random() * 3}s;
+          opacity:${0.25 + Math.random() * 0.5};
+        `;
+        c.appendChild(d);
+      }
+    })();
+
+    // ─────────────────────────────────────────────────────────────
+    // FACETIME FLASH — the long distance, played back and let go
+    // drop or reorder files in ft/ and change FT_COUNT to match
+    // ─────────────────────────────────────────────────────────────
+
+    const FT_COUNT = 16;
+    const REDUCED  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // start pulling these down immediately; the montage is ~20s away
+    const ftReady = Promise.all(
+      Array.from({ length: FT_COUNT }, (_, i) => {
+        const src = `ft/${String(i + 1).padStart(2, '0')}.jpg`;
+        return new Promise(resolve => {
+          const img = new Image();
+          img.onload  = () => resolve(src);
+          img.onerror = () => resolve(null);
+          img.src = src;
+        });
+      })
+    ).then(list => list.filter(Boolean));
+
+    async function runFacetime() {
+      const frames = await ftReady;
+      if (!frames.length) return; // no photos, no montage, story still finishes
+
+      const overlay = document.getElementById('ftFlash');
+      const frame   = document.getElementById('ftFrame');
+      const caption = document.getElementById('ftCaption');
+
+      frame.style.backgroundImage = `url('${frames[0]}')`;
+      overlay.classList.add('visible');
+      await wait(600);
+      caption.classList.add('visible');
+
+      const n = frames.length;
+      for (let i = 0; i < n; i++) {
+        frame.style.backgroundImage = `url('${frames[i]}')`;
+        // rushes through the middle, lingers at the start and the end
+        const edge = Math.abs(i / (n - 1) - 0.5) * 2;
+        await wait(REDUCED ? 700 : 120 + edge * 260);
+      }
+
+      await wait(800);
+      caption.classList.remove('visible');
+      overlay.classList.remove('visible');
+      await wait(1100);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // NAME FLIPPER — the callback to the first page
+    // ─────────────────────────────────────────────────────────────
+
+    async function runFlipper() {
+      const flipper = document.getElementById('flipper');
+      const track   = document.getElementById('track');
+      const items   = track.querySelectorAll('.name-item');
+      const itemH   = items[0].getBoundingClientRect().height;
+
+      flipper.classList.add('visible');
+
+      for (let i = 1; i < items.length; i++) {
+        // it slows down right before the name it has never shown before
+        await wait(i === items.length - 1 ? 1400 : 640);
+        track.style.transform = `translateY(-${i * itemH}px)`;
+      }
+
+      await wait(600);
+      items[items.length - 1].classList.add('landed');
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // SEQUENCE
+    // ─────────────────────────────────────────────────────────────
+
+    async function runOpening() {
+      await wait(1400);
+      document.getElementById('greeting').classList.add('visible');
+
+      await typeSequence(OPENING);
+
+      await wait(700);
+      document.getElementById('clocks').classList.add('visible');
+
+      await wait(600);
+      document.getElementById('gap').classList.add('visible');
+
+      await wait(600);
+      document.getElementById('prints').classList.add('visible');
+
+      await wait(900);
+      document.getElementById('action').classList.add('visible');
+    }
+
+    async function runMerge() {
+      merged = true;
+      document.body.classList.add('merged');
+
+      await windBack(3000);
+
+      document.getElementById('gapCaption').textContent = 'paid off';
+      document.getElementById('label-austin').style.opacity = '0';
+      document.getElementById('label-portland').textContent = 'here';
+
+      await wait(500);
+      document.getElementById('gap').classList.remove('visible');
+
+      // both clocks read the same thing now, so say it out loud
+      const t = digitString(zoneMinutes(PORTLAND_TZ, new Date()));
+
+      await typeSequence([
+        { id: 'post-0', text: `it's ${t} here.`,   pre: 500, hold: 400 },
+        { id: 'post-1', text: `it's ${t} there.`,  pre: 600, hold: 500 },
+        { id: 'post-2', text: 'there is no there.', pre: 900, hold: 400 },
+      ]);
+
+      removeCursor(document.getElementById('post-2'));
+
+      await wait(1200);
+      await runFacetime();
+
+      // FILL IN: alternative closer, 'good riddance.'
+      await typeSequence([
+        { id: 'post-3', text: 'facetime to real time.', pre: 500, hold: 0 },
+      ]);
+
+      await wait(1100);
+      await runFlipper();
+
+      await wait(800);
+      document.getElementById('signoff').classList.add('visible');
+    }
+
+    document.getElementById('gapBtn').addEventListener('click', function () {
+      if (merged) return;
+      this.disabled = true;
+      runMerge();
+    });
+
+    runClocks();
+    runOpening();
+  </script>
+</body>
+</html>

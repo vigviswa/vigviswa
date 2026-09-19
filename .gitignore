@@ -1,1 +1,5 @@
 .DS_Store
+
+# source photos, kept local; only the web-ready crops are committed
+Photos Facetime/
+*.HEIC
